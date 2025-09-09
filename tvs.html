@@ -386,6 +386,38 @@
                         <textarea class="form-control" id="tvDescription" rows="3" placeholder="Informações adicionais sobre a TV, localização específica, observações..."></textarea>
                     </div>
 
+                    <div class="form-group">
+                        <label for="tvPlaylist" class="form-label">Vincular à Playlist</label>
+                        <select id="tvPlaylist" class="form-control form-select">
+                            <option value="">Nenhuma Playlist</option>
+                            <option value="playlist1">Playlist de Promoções</option>
+                            <option value="playlist2">Playlist de Lançamentos</option>
+                            <option value="playlist3">Playlist Institucional</option>
+                        </select>
+                    </div>
+
+                    <!-- Seção de Configurações de Conexão -->
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h3 class="card-title">Configurações de Conexão</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i>
+                                Para conectar a TV, insira o código de pareamento no dispositivo.
+                            </div>
+                            <div class="form-group">
+                                <label for="pairingCode" class="form-label">Código de Pareamento</label>
+                                <div class="input-group">
+                                    <input type="text" id="pairingCode" class="form-control" value="QRT-2024-001" readonly>
+                                    <button class="btn btn-secondary" onclick="generatePairingCode()">
+                                        <i class="fas fa-sync"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     
 
                     

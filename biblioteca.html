@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR TV Indoor - Biblioteca de Artes</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="images/logo.png" alt="QR TV Indoor" class="img-fluid">
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="tvs.html" class="nav-item">
+                    <i class="fas fa-tv"></i>
+                    Gerenciar TVs
+                </a>
+                <a href="biblioteca.html" class="nav-item active">
+                    <i class="fas fa-images"></i>
+                    Biblioteca de Artes
+                </a>
+                <a href="playlists-list.html" class="nav-item">
+                    <i class="fas fa-list"></i>
+                    Playlists
+                </a>
+                <a href="agendamento.html" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    Agendamento
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Relatórios
+                </a>
+                <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--border-color);">
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Configurações
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1>Biblioteca de Artes</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="importArts()">
+                        <i class="fas fa-upload"></i>
+                        Importar do QR Ofertas
+                    </button>
+                    <button class="btn btn-primary" onclick="createNewArt()">
+                        <i class="fas fa-plus"></i>
+                        Nova Arte
+                    </button>
+                </div>
+            </header>
+
+            <!-- Estatísticas -->
+            <div class="grid grid-4 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 24px; color: var(--primary-color); margin-bottom: 8px;">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <h3 style="font-size: 20px; margin-bottom: 4px;">156</h3>
+                        <p class="text-muted">Total de Artes</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 24px; color: var(--accent-color); margin-bottom: 8px;">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <h3 style="font-size: 20px; margin-bottom: 4px;">89</h3>
+                        <p class="text-muted">Formato TV</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 24px; color: var(--warning-color); margin-bottom: 8px;">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 style="font-size: 20px; margin-bottom: 4px;">12</h3>
+                        <p class="text-muted">Adicionadas Hoje</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 24px; color: var(--danger-color); margin-bottom: 8px;">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3 style="font-size: 20px; margin-bottom: 4px;">24</h3>
+                        <p class="text-muted">Favoritas</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros e Busca -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="grid grid-4 gap-2 mb-3">
+                        <div class="form-group">
+                            <label class="form-label">Buscar</label>
+                            <input type="text" class="form-control" id="searchInput" placeholder="Nome, tema ou campanha...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Categoria</label>
+                            <select class="form-control form-select" id="categoryFilter">
+                                <option value="">Todas as categorias</option>
+                                <option value="promocoes">Promoções</option>
+                                <option value="ofertas">Ofertas</option>
+                                <option value="institucional">Institucional</option>
+                                <option value="sazonal">Sazonal</option>
+                                <option value="produtos">Produtos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Data de Criação</label>
+                            <select class="form-control form-select" id="dateFilter">
+                                <option value="">Todas as datas</option>
+                                <option value="today">Hoje</option>
+                                <option value="week">Esta semana</option>
+                                <option value="month">Este mês</option>
+                                <option value="custom">Período personalizado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ordenar por</label>
+                            <select class="form-control form-select" id="sortFilter">
+                                <option value="newest">Mais recentes</option>
+                                <option value="oldest">Mais antigas</option>
+                                <option value="name">Nome A-Z</option>
+                                <option value="name-desc">Nome Z-A</option>
+                                <option value="popular">Mais usadas</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-secondary btn-sm" onclick="clearFilters()">
+                                <i class="fas fa-times"></i>
+                                Limpar Filtros
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="toggleFavorites()">
+                                <i class="fas fa-star"></i>
+                                Apenas Favoritas
+                            </button>
+                        </div>
+                        <div class="d-flex gap-2 align-items-center">
+                            <span class="text-muted text-small">Visualização:</span>
+                            <button class="btn btn-secondary btn-sm" onclick="toggleView('grid')" id="gridViewBtn">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="toggleView('list')" id="listViewBtn">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ações em Massa -->
+            <div id="bulkActions" class="card mb-4" style="display: none;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong id="selectedCount">0</strong> artes selecionadas
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-secondary btn-sm" onclick="addToPlaylist()">
+                                <i class="fas fa-plus"></i>
+                                Adicionar à Playlist
+                            </button>
+                            <button class="btn btn-warning btn-sm" onclick="bulkFavorite()">
+                                <i class="fas fa-star"></i>
+                                Favoritar
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="bulkDelete()">
+                                <i class="fas fa-trash"></i>
+                                Excluir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Galeria de Artes -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="card-title">Artes Disponíveis (89)</h2>
+                    <div class="d-flex gap-2">
+                        <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                        <label for="selectAll" class="text-small">Selecionar todas</label>
+                    </div>
+                </div>
+                
+                <!-- Visualização em Grid -->
+                <div id="gridView" class="card-body">
+                    <div class="arts-grid" id="artsContainer">
+                        <!-- Arte 1 -->
+                        <div class="art-card" data-category="promocoes" data-date="2024-09-08">
+                            <div class="art-card-header">
+                                <input type="checkbox" class="art-checkbox" onchange="updateBulkActions()">
+                                <button class="btn-favorite" onclick="toggleFavorite(this)">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                            <div class="art-preview">
+                                <div class="art-placeholder">
+                                    <i class="fas fa-image"></i>
+                                    <p>Oferta Especial<br>Frutas Vermelhas</p>
+                                </div>
+                            </div>
+                            <div class="art-card-body">
+                                <h4>Promoção Frutas Vermelhas</h4>
+                                <p class="text-muted text-small">Campanha: Ofertas de Setembro</p>
+                                <div class="art-meta">
+                                    <span class="badge badge-primary">Promoções</span>
+                                    <span class="text-small text-muted">Criada hoje</span>
+                                </div>
+                            </div>
+                            <div class="art-card-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="previewArt('art1')">
+                                    <i class="fas fa-eye"></i>
+                                    Visualizar
+                                </button>
+                                <button class="btn btn-primary btn-sm" onclick="addToPlaylistSingle('art1')">
+                                    <i class="fas fa-plus"></i>
+                                    Playlist
+                                </button>
+                                <button class="btn btn-secondary btn-sm" onclick="editArt('art1')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Arte 2 -->
+                        <div class="art-card" data-category="ofertas" data-date="2024-09-07">
+                            <div class="art-card-header">
+                                <input type="checkbox" class="art-checkbox" onchange="updateBulkActions()">
+                                <button class="btn-favorite favorited" onclick="toggleFavorite(this)">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                            <div class="art-preview">
+                                <div class="art-placeholder" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <p>Black Friday<br>50% OFF</p>
+                                </div>
+                            </div>
+                            <div class="art-card-body">
+                                <h4>Black Friday 2024</h4>
+                                <p class="text-muted text-small">Campanha: Black Friday</p>
+                                <div class="art-meta">
+                                    <span class="badge badge-success">Ofertas</span>
+                                    <span class="text-small text-muted">Ontem</span>
+                                </div>
+                            </div>
+                            <div class="art-card-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="previewArt('art2')">
+                                    <i class="fas fa-eye"></i>
+                                    Visualizar
+                                </button>
+                                <button class="btn btn-primary btn-sm" onclick="addToPlaylistSingle('art2')">
+                                    <i class="fas fa-plus"></i>
+                                    Playlist
+                                </button>
+                                <button class="btn btn-secondary btn-sm" onclick="editArt('art2')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Arte 3 -->
+                        <div class="art-card" data-category="institucional" data-date="2024-09-06">
+                            <div class="art-card-header">
+                                <input type="checkbox" class="art-checkbox" onchange="updateBulkActions()">
+                                <button class="btn-favorite" onclick="toggleFavorite(this)">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                            <div class="art-preview">
+                                <div class="art-placeholder" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                    <i class="fas fa-heart"></i>
+                                    <p>Bem-vindos<br>ao nosso mercado</p>
+                                </div>
+                            </div>
+                            <div class="art-card-body">
+                                <h4>Mensagem de Boas-vindas</h4>
+                                <p class="text-muted text-small">Campanha: Institucional</p>
+                                <div class="art-meta">
+                                    <span class="badge badge-primary">Institucional</span>
+                                    <span class="text-small text-muted">2 dias atrás</span>
+                                </div>
+                            </div>
+                            <div class="art-card-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="previewArt('art3')">
+                                    <i class="fas fa-eye"></i>
+                                    Visualizar
+                                </button>
+                                <button class="btn btn-primary btn-sm" onclick="addToPlaylistSingle('art3')">
+                                    <i class="fas fa-plus"></i>
+                                    Playlist
+                                </button>
+                                <button class="btn btn-secondary btn-sm" onclick="editArt('art3')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Arte 4 -->
+                        <div class="art-card" data-category="produtos" data-date="2024-09-05">
+                            <div class="art-card-header">
+                                <input type="checkbox" class="art-checkbox" onchange="updateBulkActions()">
+                                <button class="btn-favorite" onclick="toggleFavorite(this)">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                            <div class="art-preview">
+                                <div class="art-placeholder" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                    <i class="fas fa-bread-slice"></i>
+                                    <p>Pães Frescos<br>Todos os dias</p>
+                                </div>
+                            </div>
+                            <div class="art-card-body">
+                                <h4>Padaria - Pães Frescos</h4>
+                                <p class="text-muted text-small">Campanha: Produtos Frescos</p>
+                                <div class="art-meta">
+                                    <span class="badge badge-success">Produtos</span>
+                                    <span class="text-small text-muted">3 dias atrás</span>
+                                </div>
+                            </div>
+                            <div class="art-card-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="previewArt('art4')">
+                                    <i class="fas fa-eye"></i>
+                                    Visualizar
+                                </button>
+                                <button class="btn btn-primary btn-sm" onclick="addToPlaylistSingle('art4')">
+                                    <i class="fas fa-plus"></i>
+                                    Playlist
+                                </button>
+                                <button class="btn btn-secondary btn-sm" onclick="editArt('art4')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Arte 5 -->
+                        <div class="art-card" data-category="sazonal" data-date="2024-09-04">
+                            <div class="art-card-header">
+                                <input type="checkbox" class="art-checkbox" onchange="updateBulkActions()">
+                                <button class="btn-favorite favorited" onclick="toggleFavorite(this)">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                            <div class="art-preview">
+                                <div class="art-placeholder" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                                    <i class="fas fa-leaf"></i>
+                                    <p>Primavera<br>Chegou!</p>
+                                </div>
+                            </div>
+                            <div class="art-card-body">
+                                <h4>Chegada da Primavera</h4>
+                                <p class="text-muted text-small">Campanha: Estações do Ano</p>
+                                <div class="art-meta">
+                                    <span class="badge badge-success">Sazonal</span>
+                                    <span class="text-small text-muted">4 dias atrás</span>
+                                </div>
+                            </div>
+                            <div class="art-card-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="previewArt('art5')">
+                                    <i class="fas fa-eye"></i>
+                                    Visualizar
+                                </button>
+                                <button class="btn btn-primary btn-sm" onclick="addToPlaylistSingle('art5')">
+                                    <i class="fas fa-plus"></i>
+                                    Playlist
+                                </button>
+                                <button class="btn btn-secondary btn-sm" onclick="editArt('art5')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Arte 6 -->
+                        <div class="art-card" data-category="promocoes" data-date="2024-09-03">
+                            <div class="art-card-header">
+                                <input type="checkbox" class="art-checkbox" onchange="updateBulkActions()">
+                                <button class="btn-favorite" onclick="toggleFavorite(this)">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                            <div class="art-preview">
+                                <div class="art-placeholder" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                                    <i class="fas fa-percent"></i>
+                                    <p>Desconto<br>Especial</p>
+                                </div>
+                            </div>
+                            <div class="art-card-body">
+                                <h4>Desconto Especial Carnes</h4>
+                                <p class="text-muted text-small">Campanha: Açougue Premium</p>
+                                <div class="art-meta">
+                                    <span class="badge badge-primary">Promoções</span>
+                                    <span class="text-small text-muted">5 dias atrás</span>
+                                </div>
+                            </div>
+                            <div class="art-card-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="previewArt('art6')">
+                                    <i class="fas fa-eye"></i>
+                                    Visualizar
+                                </button>
+                                <button class="btn btn-primary btn-sm" onclick="addToPlaylistSingle('art6')">
+                                    <i class="fas fa-plus"></i>
+                                    Playlist
+                                </button>
+                                <button class="btn btn-secondary btn-sm" onclick="editArt('art6')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paginação -->
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-muted text-small">
+                            Mostrando 1-6 de 89 artes
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                                Anterior
+                            </button>
+                            <button class="btn btn-primary btn-sm">1</button>
+                            <button class="btn btn-secondary btn-sm">2</button>
+                            <button class="btn btn-secondary btn-sm">3</button>
+                            <button class="btn btn-secondary btn-sm">...</button>
+                            <button class="btn btn-secondary btn-sm">15</button>
+                            <button class="btn btn-secondary btn-sm">
+                                Próxima
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Preview -->
+    <div id="previewModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <h2 id="previewTitle">Visualizar Arte</h2>
+                <button class="btn btn-secondary btn-sm" onclick="closePreviewModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="grid grid-2 gap-2">
+                    <div>
+                        <div class="art-preview-large">
+                            <div class="art-placeholder" style="height: 300px; font-size: 48px;">
+                                <i class="fas fa-image"></i>
+                                <p style="font-size: 18px; margin-top: 16px;">Preview da Arte</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Detalhes da Arte</h3>
+                        <div class="form-group">
+                            <label class="form-label">Nome</label>
+                            <p id="previewName">-</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Categoria</label>
+                            <p id="previewCategory">-</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Campanha</label>
+                            <p id="previewCampaign">-</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Data de Criação</label>
+                            <p id="previewDate">-</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Dimensões</label>
+                            <p>1920x1080 (Full HD)</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Formato</label>
+                            <p>TV Horizontal</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePreviewModal()">Fechar</button>
+                <button class="btn btn-warning">
+                    <i class="fas fa-star"></i>
+                    Favoritar
+                </button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Adicionar à Playlist
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Estilos específicos para a biblioteca */
+        .arts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .art-card {
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            transition: all 0.2s;
+            background: var(--white);
+        }
+
+        .art-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .art-card-header {
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--secondary-color);
+        }
+
+        .btn-favorite {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 16px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .btn-favorite:hover,
+        .btn-favorite.favorited {
+            color: var(--warning-color);
+        }
+
+        .art-preview {
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .art-placeholder {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .art-placeholder p {
+            margin: 8px 0 0 0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .art-card-body {
+            padding: 16px;
+        }
+
+        .art-card-body h4 {
+            margin: 0 0 8px 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .art-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        .art-card-actions {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 8px;
+        }
+
+        .art-card-actions .btn {
+            flex: 1;
+            font-size: 12px;
+            padding: 6px 8px;
+        }
+
+        .art-preview-large {
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .arts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+
+    <script>
+        // Variáveis globais
+        let currentView = 'grid';
+        let showFavoritesOnly = false;
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFilters();
+        });
+
+        // Configurar filtros
+        function setupFilters() {
+            const filters = ['searchInput', 'categoryFilter', 'dateFilter', 'sortFilter'];
+            filters.forEach(filterId => {
+                const element = document.getElementById(filterId);
+                element.addEventListener('input', filterArts);
+                element.addEventListener('change', filterArts);
+            });
+        }
+
+        // Filtrar artes
+        function filterArts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            const artCards = document.querySelectorAll('.art-card');
+            let visibleCards = [];
+
+            artCards.forEach(card => {
+                const title = card.querySelector('h4').textContent.toLowerCase();
+                const category = card.dataset.category;
+                const date = card.dataset.date;
+                const isFavorited = card.querySelector('.btn-favorite').classList.contains('favorited');
+
+                const matchesSearch = title.includes(searchTerm);
+                const matchesCategory = !categoryFilter || category === categoryFilter;
+                const matchesFavorites = !showFavoritesOnly || isFavorited;
+
+                const isVisible = matchesSearch && matchesCategory && matchesFavorites;
+                card.style.display = isVisible ? '' : 'none';
+
+                if (isVisible) {
+                    visibleCards.push(card);
+                }
+            });
+
+            // Aplicar ordenação
+            if (sortFilter && visibleCards.length > 0) {
+                sortArts(visibleCards, sortFilter);
+            }
+        }
+
+        // Ordenar artes
+        function sortArts(cards, sortType) {
+            const container = document.getElementById('artsContainer');
+            
+            cards.sort((a, b) => {
+                switch (sortType) {
+                    case 'newest':
+                        return new Date(b.dataset.date) - new Date(a.dataset.date);
+                    case 'oldest':
+                        return new Date(a.dataset.date) - new Date(b.dataset.date);
+                    case 'name':
+                        return a.querySelector('h4').textContent.localeCompare(b.querySelector('h4').textContent);
+                    case 'name-desc':
+                        return b.querySelector('h4').textContent.localeCompare(a.querySelector('h4').textContent);
+                    default:
+                        return 0;
+                }
+            });
+
+            // Reordenar no DOM
+            cards.forEach(card => container.appendChild(card));
+        }
+
+        // Limpar filtros
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('dateFilter').value = '';
+            document.getElementById('sortFilter').value = 'newest';
+            showFavoritesOnly = false;
+            filterArts();
+        }
+
+        // Alternar visualização de favoritas
+        function toggleFavorites() {
+            showFavoritesOnly = !showFavoritesOnly;
+            filterArts();
+        }
+
+        // Alternar visualização
+        function toggleView(view) {
+            currentView = view;
+            // Implementar mudança de visualização se necessário
+        }
+
+        // Selecionar todas as artes
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.art-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+            
+            updateBulkActions();
+        }
+
+        // Atualizar ações em massa
+        function updateBulkActions() {
+            const checkboxes = document.querySelectorAll('.art-checkbox:checked');
+            const bulkActions = document.getElementById('bulkActions');
+            const selectedCount = document.getElementById('selectedCount');
+            
+            selectedCount.textContent = checkboxes.length;
+            bulkActions.style.display = checkboxes.length > 0 ? 'block' : 'none';
+        }
+
+        // Favoritar/desfavoritar arte
+        function toggleFavorite(button) {
+            button.classList.toggle('favorited');
+        }
+
+        // Visualizar arte
+        function previewArt(artId) {
+            const modal = document.getElementById('previewModal');
+            modal.style.display = 'flex';
+            
+            // Carregar dados da arte (simulação)
+            document.getElementById('previewTitle').textContent = 'Visualizar Arte';
+            document.getElementById('previewName').textContent = 'Nome da Arte';
+            document.getElementById('previewCategory').textContent = 'Categoria';
+            document.getElementById('previewCampaign').textContent = 'Campanha';
+            document.getElementById('previewDate').textContent = 'Data de criação';
+        }
+
+        // Fechar modal de preview
+        function closePreviewModal() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+
+        // Adicionar à playlist (individual)
+        function addToPlaylistSingle(artId) {
+            alert(`Arte ${artId} adicionada à playlist!`);
+        }
+
+        // Editar arte
+        function editArt(artId) {
+            alert(`Editando arte ${artId}...`);
+        }
+
+        // Ações em massa
+        function addToPlaylist() {
+            const selected = document.querySelectorAll('.art-checkbox:checked').length;
+            alert(`${selected} artes adicionadas à playlist!`);
+        }
+
+        function bulkFavorite() {
+            const selected = document.querySelectorAll('.art-checkbox:checked').length;
+            alert(`${selected} artes favoritadas!`);
+        }
+
+        function bulkDelete() {
+            const selected = document.querySelectorAll('.art-checkbox:checked').length;
+            if (confirm(`Deseja excluir ${selected} artes selecionadas?`)) {
+                alert(`${selected} artes excluídas!`);
+            }
+        }
+
+        // Outras funções
+        function importArts() {
+            alert('Importando artes do QR Ofertas...');
+        }
+
+        function createNewArt() {
+            alert('Redirecionando para criação de nova arte...');
+        }
+
+        // Fechar modal ao clicar fora
+        document.getElementById('previewModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePreviewModal();
+            }
+        });
+    </script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+

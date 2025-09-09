@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR TV Indoor - Agendamento</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="images/logo.png" alt="QR TV Indoor" class="img-fluid">
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="tvs.html" class="nav-item">
+                    <i class="fas fa-tv"></i>
+                    Gerenciar TVs
+                </a>
+                <a href="biblioteca.html" class="nav-item">
+                    <i class="fas fa-images"></i>
+                    Biblioteca de Artes
+                </a>
+                <a href="playlists-list.html" class="nav-item">
+                    <i class="fas fa-list"></i>
+                    Playlists
+                </a>
+                <a href="agendamento.html" class="nav-item active">
+                    <i class="fas fa-calendar-alt"></i>
+                    Agendamento
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Relatórios
+                </a>
+                <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--border-color);">
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Configurações
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1>Agendamento de Publicações</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="exportSchedule()">
+                        <i class="fas fa-download"></i>
+                        Exportar
+                    </button>
+                    <button class="btn btn-primary" onclick="openScheduleModal()">
+                        <i class="fas fa-plus"></i>
+                        Novo Agendamento
+                    </button>
+                </div>
+            </header>
+
+            <!-- Filtros e Controles -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex gap-2">
+                            <select class="form-control form-select" id="tvFilter" style="width: 200px;">
+                                <option value="">Todas as TVs</option>
+                                <option value="tv001">TV Entrada Principal</option>
+                                <option value="tv002">TV Hortifrúti</option>
+                                <option value="tv003">TV Padaria</option>
+                                <option value="tv004">TV Açougue</option>
+                                <option value="tv005">TV Checkout</option>
+                            </select>
+                            <select class="form-control form-select" id="statusFilter" style="width: 150px;">
+                                <option value="">Todos os Status</option>
+                                <option value="agendado">Agendado</option>
+                                <option value="ativo">Ativo</option>
+                                <option value="concluido">Concluído</option>
+                                <option value="cancelado">Cancelado</option>
+                            </select>
+                            <button class="btn btn-secondary" onclick="clearFilters()">
+                                <i class="fas fa-times"></i>
+                                Limpar
+                            </button>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-secondary btn-sm" onclick="changeView('week')" id="weekViewBtn">
+                                <i class="fas fa-calendar-week"></i>
+                                Semana
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="changeView('month')" id="monthViewBtn">
+                                <i class="fas fa-calendar"></i>
+                                Mês
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navegação do Calendário -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex gap-2 align-items-center">
+                            <button class="btn btn-secondary" onclick="previousPeriod()">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <h2 id="currentPeriod" style="margin: 0; min-width: 200px; text-align: center;">Setembro 2024</h2>
+                            <button class="btn btn-secondary" onclick="nextPeriod()">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-secondary btn-sm" onclick="goToToday()">
+                                <i class="fas fa-calendar-day"></i>
+                                Hoje
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="openScheduleModal()">
+                                <i class="fas fa-plus"></i>
+                                Agendar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendário -->
+            <div class="card">
+                <div class="card-body" style="padding: 0;">
+                    <div id="calendar" class="calendar-container">
+                        <!-- Cabeçalho dos dias da semana -->
+                        <div class="calendar-header">
+                            <div class="calendar-day-header">Dom</div>
+                            <div class="calendar-day-header">Seg</div>
+                            <div class="calendar-day-header">Ter</div>
+                            <div class="calendar-day-header">Qua</div>
+                            <div class="calendar-day-header">Qui</div>
+                            <div class="calendar-day-header">Sex</div>
+                            <div class="calendar-day-header">Sáb</div>
+                        </div>
+                        
+                        <!-- Dias do calendário -->
+                        <div class="calendar-grid" id="calendarGrid">
+                            <!-- Os dias serão gerados dinamicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Agendamentos -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Próximos Agendamentos</h3>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Conteúdo</th>
+                                <th>TVs</th>
+                                <th>Status</th>
+                                <th>Repetição</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <strong>09/09/2024</strong>
+                                        <div class="text-small text-muted">08:00 - 18:00</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-list" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>Playlist: Ofertas do Dia</strong>
+                                            <div class="text-small text-muted">5 artes • 2 min 30 seg</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <span class="badge badge-primary">TV Entrada</span>
+                                        <span class="badge badge-success">TV Checkout</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status status-pending">
+                                        <i class="fas fa-clock"></i>
+                                        Agendado
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="text-small">Diário</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <button class="btn btn-secondary btn-sm" onclick="editSchedule('sch1')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="cancelSchedule('sch1')">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <strong>08/09/2024</strong>
+                                        <div class="text-small text-muted">14:30 - 15:00</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-image" style="color: var(--accent-color); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>Arte: Black Friday 2024</strong>
+                                            <div class="text-small text-muted">30 segundos</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge badge-primary">Todas as TVs</span>
+                                </td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-play"></i>
+                                        Ativo
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="text-small">Única vez</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <button class="btn btn-warning btn-sm" onclick="stopSchedule('sch2')">
+                                            <i class="fas fa-stop"></i>
+                                        </button>
+                                        <button class="btn btn-secondary btn-sm" onclick="editSchedule('sch2')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <strong>07/09/2024</strong>
+                                        <div class="text-small text-muted">09:00 - 17:00</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-list" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>Playlist: Produtos Frescos</strong>
+                                            <div class="text-small text-muted">3 artes • 1 min 45 seg</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <span class="badge badge-success">TV Hortifrúti</span>
+                                        <span class="badge badge-primary">TV Padaria</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status status-offline">
+                                        <i class="fas fa-check"></i>
+                                        Concluído
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="text-small">Dias úteis</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <button class="btn btn-secondary btn-sm" onclick="duplicateSchedule('sch3')">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteSchedule('sch3')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Agendamento -->
+    <div id="scheduleModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2 id="scheduleModalTitle">Novo Agendamento</h2>
+                <button class="btn btn-secondary btn-sm" onclick="closeScheduleModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="scheduleForm">
+                    <!-- Tipo de Conteúdo -->
+                    <div class="form-group">
+                        <label class="form-label">Tipo de Conteúdo *</label>
+                        <div class="d-flex gap-2">
+                            <label class="radio-option">
+                                <input type="radio" name="contentType" value="playlist" checked onchange="toggleContentType()">
+                                <span>Playlist</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="contentType" value="art" onchange="toggleContentType()">
+                                <span>Arte Individual</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Seleção de Conteúdo -->
+                    <div class="grid grid-2 gap-2">
+                        <div class="form-group" id="playlistSelection">
+                            <label class="form-label">Playlist *</label>
+                            <select class="form-control form-select" id="selectedPlaylist">
+                                <option value="">Selecione uma playlist</option>
+                                <option value="playlist1">Ofertas do Dia</option>
+                                <option value="playlist2">Black Friday</option>
+                                <option value="playlist3">Produtos Frescos</option>
+                                <option value="playlist4">Institucional</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="artSelection" style="display: none;">
+                            <label class="form-label">Arte *</label>
+                            <select class="form-control form-select" id="selectedArt">
+                                <option value="">Selecione uma arte</option>
+                                <option value="art1">Promoção Frutas Vermelhas</option>
+                                <option value="art2">Black Friday 2024</option>
+                                <option value="art3">Mensagem de Boas-vindas</option>
+                                <option value="art4">Padaria - Pães Frescos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">TVs de Destino *</label>
+                            <select class="form-control form-select" id="targetTVs" multiple>
+                                <option value="all">Todas as TVs</option>
+                                <option value="tv001">TV Entrada Principal</option>
+                                <option value="tv002">TV Hortifrúti</option>
+                                <option value="tv003">TV Padaria</option>
+                                <option value="tv004">TV Açougue</option>
+                                <option value="tv005">TV Checkout</option>
+                            </select>
+                            <small class="text-muted">Segure Ctrl para selecionar múltiplas TVs</small>
+                        </div>
+                    </div>
+
+                    <!-- Data e Hora -->
+                    <div class="grid grid-2 gap-2">
+                        <div class="form-group">
+                            <label class="form-label">Data de Início *</label>
+                            <input type="date" class="form-control" id="startDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Data de Fim</label>
+                            <input type="date" class="form-control" id="endDate">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2 gap-2">
+                        <div class="form-group">
+                            <label class="form-label">Hora de Início *</label>
+                            <input type="time" class="form-control" id="startTime" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Hora de Fim</label>
+                            <input type="time" class="form-control" id="endTime">
+                        </div>
+                    </div>
+
+                    <!-- Repetição -->
+                    <div class="form-group">
+                        <label class="form-label">Repetição</label>
+                        <select class="form-control form-select" id="repeatType" onchange="toggleRepeatOptions()">
+                            <option value="none">Não repetir</option>
+                            <option value="daily">Diariamente</option>
+                            <option value="weekdays">Dias úteis</option>
+                            <option value="weekly">Semanalmente</option>
+                            <option value="monthly">Mensalmente</option>
+                            <option value="custom">Personalizado</option>
+                        </select>
+                    </div>
+
+                    <!-- Opções de Repetição Personalizada -->
+                    <div id="customRepeatOptions" class="form-group" style="display: none;">
+                        <label class="form-label">Dias da Semana</label>
+                        <div class="d-flex gap-2">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="repeatDays" value="0">
+                                <span>Dom</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="repeatDays" value="1">
+                                <span>Seg</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="repeatDays" value="2">
+                                <span>Ter</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="repeatDays" value="3">
+                                <span>Qua</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="repeatDays" value="4">
+                                <span>Qui</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="repeatDays" value="5">
+                                <span>Sex</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="repeatDays" value="6">
+                                <span>Sáb</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Configurações Avançadas -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Configurações Avançadas</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="grid grid-2 gap-2">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <input type="checkbox" id="autoStart">
+                                        Iniciar automaticamente
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <input type="checkbox" id="sendNotification">
+                                        Enviar notificação
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" id="scheduleNotes" rows="3" placeholder="Observações sobre este agendamento..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeScheduleModal()">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="previewSchedule()">
+                    <i class="fas fa-eye"></i>
+                    Visualizar
+                </button>
+                <button type="submit" class="btn btn-success" form="scheduleForm">
+                    <i class="fas fa-save"></i>
+                    Salvar Agendamento
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Estilos específicos para agendamento */
+        .calendar-container {
+            width: 100%;
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background: var(--secondary-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .calendar-day-header {
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-right: 1px solid var(--border-color);
+        }
+
+        .calendar-day-header:last-child {
+            border-right: none;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            min-height: 400px;
+        }
+
+        .calendar-day {
+            min-height: 100px;
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 8px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .calendar-day:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .calendar-day:last-child {
+            border-right: none;
+        }
+
+        .calendar-day.other-month {
+            background-color: #fafafa;
+            color: var(--text-light);
+        }
+
+        .calendar-day.today {
+            background-color: rgba(99, 102, 241, 0.1);
+            border: 2px solid var(--primary-color);
+        }
+
+        .calendar-day.selected {
+            background-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .day-number {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .day-events {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .event-item {
+            background: var(--primary-color);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .event-item.playlist {
+            background: var(--primary-color);
+        }
+
+        .event-item.art {
+            background: var(--accent-color);
+        }
+
+        .event-item.active {
+            background: var(--warning-color);
+        }
+
+        .event-item.completed {
+            background: var(--text-light);
+        }
+
+        /* Estilos para formulário */
+        .radio-option,
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .radio-option:hover,
+        .checkbox-option:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .radio-option input,
+        .checkbox-option input {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .calendar-day {
+                min-height: 80px;
+                padding: 4px;
+            }
+            
+            .day-events {
+                gap: 1px;
+            }
+            
+            .event-item {
+                font-size: 9px;
+                padding: 1px 4px;
+            }
+            
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <script>
+        // Variáveis globais
+        let currentDate = new Date(2024, 8, 1); // Setembro 2024
+        let currentView = 'month';
+        let selectedDate = null;
+
+        // Dados de exemplo para agendamentos
+        const scheduleData = {
+            '2024-09-08': [
+                { id: 'sch2', type: 'art', name: 'Black Friday 2024', time: '14:30', status: 'active' }
+            ],
+            '2024-09-09': [
+                { id: 'sch1', type: 'playlist', name: 'Ofertas do Dia', time: '08:00', status: 'scheduled' }
+            ],
+            '2024-09-10': [
+                { id: 'sch4', type: 'playlist', name: 'Produtos Frescos', time: '09:00', status: 'scheduled' }
+            ]
+        };
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            generateCalendar();
+            setDefaultDate();
+            setupFilters();
+        });
+
+        // Configurar data padrão
+        function setDefaultDate() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            document.getElementById('startDate').value = tomorrow.toISOString().split('T')[0];
+            document.getElementById('startTime').value = '08:00';
+            document.getElementById('endTime').value = '18:00';
+        }
+
+        // Configurar filtros
+        function setupFilters() {
+            const filters = ['tvFilter', 'statusFilter'];
+            filters.forEach(filterId => {
+                const element = document.getElementById(filterId);
+                element.addEventListener('change', applyFilters);
+            });
+        }
+
+        // Gerar calendário
+        function generateCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            // Atualizar título
+            const monthNames = [
+                'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+            ];
+            document.getElementById('currentPeriod').textContent = `${monthNames[month]} ${year}`;
+
+            // Gerar dias
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+            const calendarGrid = document.getElementById('calendarGrid');
+            calendarGrid.innerHTML = '';
+
+            const today = new Date();
+            
+            for (let i = 0; i < 42; i++) {
+                const currentDay = new Date(startDate);
+                currentDay.setDate(startDate.getDate() + i);
+                
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                
+                if (currentDay.getMonth() !== month) {
+                    dayElement.classList.add('other-month');
+                }
+                
+                if (currentDay.toDateString() === today.toDateString()) {
+                    dayElement.classList.add('today');
+                }
+                
+                const dateString = currentDay.toISOString().split('T')[0];
+                const events = scheduleData[dateString] || [];
+                
+                dayElement.innerHTML = `
+                    <div class="day-number">${currentDay.getDate()}</div>
+                    <div class="day-events">
+                        ${events.map(event => `
+                            <div class="event-item ${event.type} ${event.status}" 
+                                 onclick="viewEventDetails('${event.id}')" 
+                                 title="${event.name} - ${event.time}">
+                                ${event.name}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                dayElement.addEventListener('click', () => selectDate(currentDay));
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        // Selecionar data
+        function selectDate(date) {
+            selectedDate = date;
+            
+            // Remover seleção anterior
+            document.querySelectorAll('.calendar-day.selected').forEach(day => {
+                day.classList.remove('selected');
+            });
+            
+            // Adicionar seleção atual
+            event.currentTarget.classList.add('selected');
+            
+            // Abrir modal de agendamento
+            openScheduleModal(date);
+        }
+
+        // Navegar períodos
+        function previousPeriod() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar();
+        }
+
+        function nextPeriod() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar();
+        }
+
+        function goToToday() {
+            currentDate = new Date();
+            generateCalendar();
+        }
+
+        // Mudar visualização
+        function changeView(view) {
+            currentView = view;
+            
+            // Atualizar botões
+            document.getElementById('weekViewBtn').className = view === 'week' ? 'btn btn-primary btn-sm' : 'btn btn-secondary btn-sm';
+            document.getElementById('monthViewBtn').className = view === 'month' ? 'btn btn-primary btn-sm' : 'btn btn-secondary btn-sm';
+            
+            // Implementar lógica de visualização semanal se necessário
+            if (view === 'week') {
+                alert('Visualização semanal será implementada em breve!');
+            }
+        }
+
+        // Aplicar filtros
+        function applyFilters() {
+            const tvFilter = document.getElementById('tvFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            // Implementar lógica de filtros
+            console.log('Aplicando filtros:', { tvFilter, statusFilter });
+        }
+
+        // Limpar filtros
+        function clearFilters() {
+            document.getElementById('tvFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            applyFilters();
+        }
+
+        // Modal de agendamento
+        function openScheduleModal(date = null) {
+            const modal = document.getElementById('scheduleModal');
+            
+            if (date) {
+                document.getElementById('startDate').value = date.toISOString().split('T')[0];
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeScheduleModal() {
+            document.getElementById('scheduleModal').style.display = 'none';
+        }
+
+        // Alternar tipo de conteúdo
+        function toggleContentType() {
+            const contentType = document.querySelector('input[name="contentType"]:checked').value;
+            const playlistSelection = document.getElementById('playlistSelection');
+            const artSelection = document.getElementById('artSelection');
+            
+            if (contentType === 'playlist') {
+                playlistSelection.style.display = 'block';
+                artSelection.style.display = 'none';
+            } else {
+                playlistSelection.style.display = 'none';
+                artSelection.style.display = 'block';
+            }
+        }
+
+        // Alternar opções de repetição
+        function toggleRepeatOptions() {
+            const repeatType = document.getElementById('repeatType').value;
+            const customOptions = document.getElementById('customRepeatOptions');
+            
+            customOptions.style.display = repeatType === 'custom' ? 'block' : 'none';
+        }
+
+        // Visualizar agendamento
+        function previewSchedule() {
+            const formData = new FormData(document.getElementById('scheduleForm'));
+            const scheduleData = Object.fromEntries(formData);
+            
+            console.log('Preview do agendamento:', scheduleData);
+            alert('Preview do agendamento será exibido aqui!');
+        }
+
+        // Ações de agendamento
+        function editSchedule(scheduleId) {
+            console.log('Editando agendamento:', scheduleId);
+            openScheduleModal();
+        }
+
+        function cancelSchedule(scheduleId) {
+            if (confirm('Deseja cancelar este agendamento?')) {
+                console.log('Cancelando agendamento:', scheduleId);
+                alert('Agendamento cancelado!');
+            }
+        }
+
+        function stopSchedule(scheduleId) {
+            if (confirm('Deseja parar este agendamento ativo?')) {
+                console.log('Parando agendamento:', scheduleId);
+                alert('Agendamento parado!');
+            }
+        }
+
+        function duplicateSchedule(scheduleId) {
+            console.log('Duplicando agendamento:', scheduleId);
+            openScheduleModal();
+        }
+
+        function deleteSchedule(scheduleId) {
+            if (confirm('Deseja excluir este agendamento? Esta ação não pode ser desfeita.')) {
+                console.log('Excluindo agendamento:', scheduleId);
+                alert('Agendamento excluído!');
+            }
+        }
+
+        function viewEventDetails(eventId) {
+            console.log('Visualizando detalhes do evento:', eventId);
+            alert('Detalhes do evento serão exibidos aqui!');
+        }
+
+        function exportSchedule() {
+            alert('Exportando agendamentos...');
+        }
+
+        // Submissão do formulário
+        document.getElementById('scheduleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const scheduleData = Object.fromEntries(formData);
+            
+            console.log('Salvando agendamento:', scheduleData);
+            alert('Agendamento salvo com sucesso!');
+            closeScheduleModal();
+            generateCalendar(); // Atualizar calendário
+        });
+
+        // Fechar modal ao clicar fora
+        document.getElementById('scheduleModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeScheduleModal();
+            }
+        });
+    </script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+

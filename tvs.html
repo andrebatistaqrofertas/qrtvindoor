@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR TV Indoor - Gerenciar TVs</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="images/logo.png" alt="QR TV Indoor" class="img-fluid">
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="tvs.html" class="nav-item active">
+                    <i class="fas fa-tv"></i>
+                    Gerenciar TVs
+                </a>
+                <a href="biblioteca.html" class="nav-item">
+                    <i class="fas fa-images"></i>
+                    Biblioteca de Artes
+                </a>
+                <a href="playlists-list.html" class="nav-item">
+                    <i class="fas fa-list"></i>
+                    Playlists
+                </a>
+                <a href="agendamento.html" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    Agendamento
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Relatórios
+                </a>
+                <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--border-color);">
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Configurações
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1>Gerenciar TVs</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="exportTVs()">
+                        <i class="fas fa-download"></i>
+                        Exportar
+                    </button>
+                    <button class="btn btn-primary" onclick="openTVModal()">
+                        <i class="fas fa-plus"></i>
+                        Nova TV
+                    </button>
+                </div>
+            </header>
+
+            <!-- Filtros -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="grid grid-4 gap-2">
+                        <div class="form-group">
+                            <label class="form-label">Buscar</label>
+                            <input type="text" class="form-control" id="searchInput" placeholder="Nome ou localização...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <select class="form-control form-select" id="statusFilter">
+                                <option value="">Todos</option>
+                                <option value="online">Online</option>
+                                <option value="offline">Offline</option>
+                                <option value="manutencao">Manutenção</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Localização</label>
+                            <select class="form-control form-select" id="locationFilter">
+                                <option value="">Todas</option>
+                                <option value="supermercado">Supermercado</option>
+                                <option value="padaria">Padaria</option>
+                                <option value="acougue">Açougue</option>
+                                <option value="farmacia">Farmácia</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ações</label>
+                            <button class="btn btn-secondary" onclick="clearFilters()" style="width: 100%;">
+                                <i class="fas fa-times"></i>
+                                Limpar Filtros
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de TVs -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="card-title">TVs Cadastradas (12)</h2>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-secondary btn-sm" onclick="toggleView('grid')">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="toggleView('table')">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Visualização em Tabela -->
+                <div id="tableView" class="card-body" style="padding: 0;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                                </th>
+                                <th>Nome da TV</th>
+                                <th>Localização</th>
+                                <th>Resolução</th>
+                                <th>Status</th>
+                                <th>Última Conexão</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tvsTableBody">
+                            <tr data-status="online" data-location="supermercado">
+                                <td><input type="checkbox" class="tv-checkbox"></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>TV Entrada Principal</strong>
+                                            <div class="text-small text-muted">ID: TV001</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <strong>Supermercado - Entrada</strong>
+                                        <div class="text-small text-muted">Setor A</div>
+                                    </div>
+                                </td>
+                                <td>1920x1080</td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Online
+                                    </span>
+                                </td>
+                                <td class="text-muted">Há 2 minutos</td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <button class="btn btn-secondary btn-sm" onclick="editTV('TV001')" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-primary btn-sm" onclick="testConnection('TV001')" title="Testar Conexão">
+                                            <i class="fas fa-wifi"></i>
+                                        </button>
+                                        <button class="btn btn-warning btn-sm" onclick="restartTV('TV001')" title="Reiniciar">
+                                            <i class="fas fa-sync"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteTV('TV001')" title="Excluir">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-status="online" data-location="supermercado">
+                                <td><input type="checkbox" class="tv-checkbox"></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>TV Hortifrúti</strong>
+                                            <div class="text-small text-muted">ID: TV002</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <strong>Supermercado - Hortifrúti</strong>
+                                        <div class="text-small text-muted">Setor B</div>
+                                    </div>
+                                </td>
+                                <td>1920x1080</td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Online
+                                    </span>
+                                </td>
+                                <td class="text-muted">Há 5 minutos</td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <button class="btn btn-secondary btn-sm" onclick="editTV('TV002')" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-primary btn-sm" onclick="testConnection('TV002')" title="Testar Conexão">
+                                            <i class="fas fa-wifi"></i>
+                                        </button>
+                                        <button class="btn btn-warning btn-sm" onclick="restartTV('TV002')" title="Reiniciar">
+                                            <i class="fas fa-sync"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteTV('TV002')" title="Excluir">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-status="offline" data-location="padaria">
+                                <td><input type="checkbox" class="tv-checkbox"></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--text-light); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>TV Padaria</strong>
+                                            <div class="text-small text-muted">ID: TV003</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <strong>Padaria - Balcão</strong>
+                                        <div class="text-small text-muted">Setor C</div>
+                                    </div>
+                                </td>
+                                <td>1366x768</td>
+                                <td>
+                                    <span class="status status-offline">
+                                        <i class="fas fa-circle"></i>
+                                        Offline
+                                    </span>
+                                </td>
+                                <td class="text-muted">Há 2 horas</td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <button class="btn btn-secondary btn-sm" onclick="editTV('TV003')" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-warning btn-sm" onclick="testConnection('TV003')" title="Reconectar">
+                                            <i class="fas fa-wifi"></i>
+                                        </button>
+                                        <button class="btn btn-warning btn-sm" onclick="restartTV('TV003')" title="Reiniciar">
+                                            <i class="fas fa-sync"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteTV('TV003')" title="Excluir">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Visualização em Grid -->
+                <div id="gridView" class="card-body" style="display: none;">
+                    <div class="grid grid-3" id="tvsGridContainer">
+                        <div class="card" data-status="online" data-location="supermercado">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--primary-color); font-size: 24px; margin-right: 12px;"></i>
+                                        <div>
+                                            <h3 style="margin: 0; font-size: 16px;">TV Entrada Principal</h3>
+                                            <p class="text-muted text-small" style="margin: 0;">ID: TV001</p>
+                                        </div>
+                                    </div>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Online
+                                    </span>
+                                </div>
+                                <div class="mb-3">
+                                    <p class="text-small"><strong>Localização:</strong> Supermercado - Entrada</p>
+                                    <p class="text-small"><strong>Resolução:</strong> 1920x1080</p>
+                                    <p class="text-small"><strong>Última conexão:</strong> Há 2 minutos</p>
+                                </div>
+                                <div class="d-flex gap-1">
+                                    <button class="btn btn-secondary btn-sm" onclick="editTV('TV001')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm" onclick="testConnection('TV001')">
+                                        <i class="fas fa-wifi"></i>
+                                    </button>
+                                    <button class="btn btn-warning btn-sm" onclick="restartTV('TV001')">
+                                        <i class="fas fa-sync"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteTV('TV001')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Cadastro/Edição de TV -->
+    <div id="tvModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Nova TV</h2>
+                <button class="btn btn-secondary btn-sm" onclick="closeTVModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="tvForm" class="">
+                    <div class="grid grid-2 gap-2">
+                        <div class="form-group">
+                            <label class="form-label">Nome da TV *</label>
+                            <input type="text" class="form-control" id="tvName" placeholder="Ex: TV Entrada Principal" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Código de Identificação</label>
+                            <input type="text" class="form-control" id="tvId" placeholder="Gerado automaticamente" readonly>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2 gap-2">
+                        <div class="form-group">
+                            <label class="form-label">Localização Principal *</label>
+                            <select class="form-control form-select" id="tvLocation" required>
+                                <option value="">Selecione...</option>
+                                <option value="supermercado">Supermercado</option>
+                                <option value="padaria">Padaria</option>
+                                <option value="acougue">Açougue</option>
+                                <option value="farmacia">Farmácia</option>
+                                <option value="lanchonete">Lanchonete</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Setor/Área Específica</label>
+                            <input type="text" class="form-control" id="tvSector" placeholder="Ex: Entrada, Balcão, Setor A">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2 gap-2">
+                        <div class="form-group">
+                            <label class="form-label">Resolução da Tela</label>
+                            <select class="form-control form-select" id="tvResolution">
+                                <option value="1920x1080">1920x1080 (Full HD)</option>
+                                <option value="1366x768">1366x768 (HD)</option>
+                                <option value="3840x2160">3840x2160 (4K)</option>
+                                <option value="1280x720">1280x720 (HD Ready)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tamanho da Tela</label>
+                            <select class="form-control form-select" id="tvSize">
+                                <option value="">Selecione...</option>
+                                <option value="32">32 polegadas</option>
+                                <option value="40">40 polegadas</option>
+                                <option value="43">43 polegadas</option>
+                                <option value="50">50 polegadas</option>
+                                <option value="55">55 polegadas</option>
+                                <option value="65">65 polegadas</option>
+                                <option value="75">75 polegadas</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Descrição/Notas</label>
+                        <textarea class="form-control" id="tvDescription" rows="3" placeholder="Informações adicionais sobre a TV, localização específica, observações..."></textarea>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Configurações de Conexão</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i>
+                                Para conectar a TV, insira o código de pareamento no dispositivo.
+                            </div>
+                            
+                            <div class="grid grid-2 gap-2">
+                                <div class="form-group">
+                                    <label class="form-label">Código de Pareamento</label>
+                                    <div class="d-flex gap-2">
+                                        <input type="text" class="form-control" id="pairingCode" readonly value="QRT-2024-001">
+                                        <button type="button" class="btn btn-secondary" onclick="generatePairingCode()">
+                                            <i class="fas fa-sync"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeTVModal()">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="testTVConnection()">
+                    <i class="fas fa-wifi"></i>
+                    Testar Conexão
+                </button>
+                <button type="submit" class="btn btn-success" form="tvForm">
+                    <i class="fas fa-save"></i>
+                    Salvar TV
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Estilos para o modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Responsividade para cards */
+        @media (max-width: 768px) {
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 20px;
+            }
+        }
+    </style>
+
+    <script>
+        // Variáveis globais
+        let currentView = 'table';
+        let editingTVId = null;
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFilters();
+            generateTVId();
+        });
+
+        // Configurar filtros
+        function setupFilters() {
+            const searchInput = document.getElementById('searchInput');
+            const statusFilter = document.getElementById('statusFilter');
+            const locationFilter = document.getElementById('locationFilter');
+
+            [searchInput, statusFilter, locationFilter].forEach(element => {
+                element.addEventListener('input', filterTVs);
+                element.addEventListener('change', filterTVs);
+            });
+        }
+
+        // Filtrar TVs
+        function filterTVs() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const locationFilter = document.getElementById('locationFilter').value;
+
+            const rows = document.querySelectorAll('#tvsTableBody tr');
+            const cards = document.querySelectorAll('#tvsGridContainer .card');
+
+            // Filtrar tabela
+            rows.forEach(row => {
+                const name = row.querySelector('strong').textContent.toLowerCase();
+                const location = row.cells[2].textContent.toLowerCase();
+                const status = row.dataset.status;
+                const locationData = row.dataset.location;
+
+                const matchesSearch = name.includes(searchTerm) || location.includes(searchTerm);
+                const matchesStatus = !statusFilter || status === statusFilter;
+                const matchesLocation = !locationFilter || locationData === locationFilter;
+
+                row.style.display = matchesSearch && matchesStatus && matchesLocation ? '' : 'none';
+            });
+
+            // Filtrar cards
+            cards.forEach(card => {
+                const name = card.querySelector('h3').textContent.toLowerCase();
+                const status = card.dataset.status;
+                const locationData = card.dataset.location;
+
+                const matchesSearch = name.includes(searchTerm);
+                const matchesStatus = !statusFilter || status === statusFilter;
+                const matchesLocation = !locationFilter || locationData === locationFilter;
+
+                card.style.display = matchesSearch && matchesStatus && matchesLocation ? '' : 'none';
+            });
+        }
+
+        // Limpar filtros
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('locationFilter').value = '';
+            filterTVs();
+        }
+
+        // Alternar visualização
+        function toggleView(view) {
+            currentView = view;
+            const tableView = document.getElementById('tableView');
+            const gridView = document.getElementById('gridView');
+
+            if (view === 'table') {
+                tableView.style.display = 'block';
+                gridView.style.display = 'none';
+            } else {
+                tableView.style.display = 'none';
+                gridView.style.display = 'block';
+            }
+        }
+
+        // Selecionar todas as TVs
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.tv-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+        }
+
+        // Abrir modal de TV
+        function openTVModal(tvId = null) {
+            editingTVId = tvId;
+            const modal = document.getElementById('tvModal');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            if (tvId) {
+                modalTitle.textContent = 'Editar TV';
+                loadTVData(tvId);
+            } else {
+                modalTitle.textContent = 'Nova TV';
+                document.getElementById('tvForm').reset();
+                generateTVId();
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        // Fechar modal de TV
+        function closeTVModal() {
+            document.getElementById('tvModal').style.display = 'none';
+            editingTVId = null;
+        }
+
+        // Gerar ID da TV
+        function generateTVId() {
+            const timestamp = Date.now().toString().slice(-6);
+            const randomNum = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+            document.getElementById('tvId').value = `TV${timestamp}${randomNum}`;
+        }
+
+        // Gerar código de pareamento
+        function generatePairingCode() {
+            const year = new Date().getFullYear();
+            const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            document.getElementById('pairingCode').value = `QRT-${year}-${randomNum}`;
+        }
+
+        // Carregar dados da TV para edição
+        function loadTVData(tvId) {
+            // Simulação de carregamento de dados
+            const tvData = {
+                'TV001': {
+                    name: 'TV Entrada Principal',
+                    location: 'supermercado',
+                    sector: 'Entrada',
+                    resolution: '1920x1080',
+                    size: '50',
+                    description: 'TV principal localizada na entrada do supermercado'
+                }
+            };
+
+            const data = tvData[tvId];
+            if (data) {
+                document.getElementById('tvName').value = data.name;
+                document.getElementById('tvId').value = tvId;
+                document.getElementById('tvLocation').value = data.location;
+                document.getElementById('tvSector').value = data.sector;
+                document.getElementById('tvResolution').value = data.resolution;
+                document.getElementById('tvSize').value = data.size;
+                document.getElementById('tvDescription').value = data.description;
+            }
+        }
+
+        // Testar conexão da TV
+        function testTVConnection() {
+            const tvName = document.getElementById('tvName').value;
+            if (!tvName) {
+                alert('Por favor, preencha o nome da TV primeiro.');
+                return;
+            }
+
+            // Simulação de teste de conexão
+            const button = event.target;
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testando...';
+            button.disabled = true;
+
+            setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-check"></i> Conexão OK';
+                button.className = 'btn btn-success';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.className = 'btn btn-primary';
+                    button.disabled = false;
+                }, 2000);
+            }, 2000);
+        }
+
+        // Funções de ação das TVs
+        function editTV(tvId) {
+            openTVModal(tvId);
+        }
+
+        function testConnection(tvId) {
+            alert(`Testando conexão da TV ${tvId}...`);
+        }
+
+        function restartTV(tvId) {
+            if (confirm(`Deseja reiniciar a TV ${tvId}?`)) {
+                alert(`TV ${tvId} será reiniciada.`);
+            }
+        }
+
+        function deleteTV(tvId) {
+            if (confirm(`Deseja excluir a TV ${tvId}? Esta ação não pode ser desfeita.`)) {
+                alert(`TV ${tvId} foi excluída.`);
+            }
+        }
+
+        function exportTVs() {
+            alert('Exportando lista de TVs...');
+        }
+
+        // Submissão do formulário
+        document.getElementById('tvForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const tvData = Object.fromEntries(formData);
+            
+            console.log('Dados da TV:', tvData);
+            alert(editingTVId ? 'TV atualizada com sucesso!' : 'TV cadastrada com sucesso!');
+            closeTVModal();
+        });
+
+        // Fechar modal ao clicar fora
+        document.getElementById('tvModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTVModal();
+            }
+        });
+    </script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+

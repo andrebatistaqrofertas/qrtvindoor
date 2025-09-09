@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR TV Indoor - Relatórios</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="images/logo.png" alt="QR TV Indoor" class="img-fluid">
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="tvs.html" class="nav-item">
+                    <i class="fas fa-tv"></i>
+                    Gerenciar TVs
+                </a>
+                <a href="biblioteca.html" class="nav-item">
+                    <i class="fas fa-images"></i>
+                    Biblioteca de Artes
+                </a>
+                <a href="playlists-list.html" class="nav-item">
+                    <i class="fas fa-list"></i>
+                    Playlists
+                </a>
+                <a href="agendamento.html" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    Agendamento
+                </a>
+                <a href="relatorios.html" class="nav-item active">
+                    <i class="fas fa-chart-bar"></i>
+                    Relatórios
+                </a>
+                <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--border-color);">
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Configurações
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1>Monitoramento e Relatórios</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="exportReport()">
+                        <i class="fas fa-download"></i>
+                        Exportar Relatório
+                    </button>
+                    <button class="btn btn-primary" onclick="refreshData()">
+                        <i class="fas fa-sync"></i>
+                        Atualizar Dados
+                    </button>
+                </div>
+            </header>
+
+            <!-- Filtros de Período -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex gap-2">
+                            <select class="form-control form-select" id="periodFilter" style="width: 150px;" onchange="updatePeriod()">
+                                <option value="today">Hoje</option>
+                                <option value="week" selected>Esta Semana</option>
+                                <option value="month">Este Mês</option>
+                                <option value="quarter">Trimestre</option>
+                                <option value="custom">Personalizado</option>
+                            </select>
+                            <div id="customPeriod" style="display: none;">
+                                <input type="date" class="form-control" id="startDate" style="width: 150px;">
+                                <span style="margin: 0 8px;">até</span>
+                                <input type="date" class="form-control" id="endDate" style="width: 150px;">
+                            </div>
+                            <select class="form-control form-select" id="tvFilter" style="width: 200px;">
+                                <option value="">Todas as TVs</option>
+                                <option value="tv001">TV Entrada Principal</option>
+                                <option value="tv002">TV Hortifrúti</option>
+                                <option value="tv003">TV Padaria</option>
+                                <option value="tv004">TV Açougue</option>
+                                <option value="tv005">TV Checkout</option>
+                            </select>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <span class="text-muted text-small">Última atualização: <span id="lastUpdate">há 2 minutos</span></span>
+                            <button class="btn btn-secondary btn-sm" onclick="toggleAutoRefresh()">
+                                <i class="fas fa-clock" id="autoRefreshIcon"></i>
+                                <span id="autoRefreshText">Auto-refresh: OFF</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status em Tempo Real -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Status em Tempo Real</h3>
+                    <div class="d-flex gap-2">
+                        <span class="status status-online">
+                            <i class="fas fa-circle"></i>
+                            Sistema Online
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-4 gap-2">
+                        <div class="status-card">
+                            <div class="status-icon" style="background: var(--accent-color);">
+                                <i class="fas fa-tv"></i>
+                            </div>
+                            <div class="status-info">
+                                <h4>10/12</h4>
+                                <p>TVs Online</p>
+                                <div class="status-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 83%;"></div>
+                                    </div>
+                                    <span class="text-small">83% operacional</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-icon" style="background: var(--primary-color);">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="status-info">
+                                <h4>8</h4>
+                                <p>Playlists Ativas</p>
+                                <div class="status-detail">
+                                    <span class="text-small text-muted">Próxima mudança em 12 min</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-icon" style="background: var(--warning-color);">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="status-info">
+                                <h4>2h 45m</h4>
+                                <p>Tempo Total Hoje</p>
+                                <div class="status-detail">
+                                    <span class="text-small text-muted">↑ 15% vs ontem</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-icon" style="background: var(--danger-color);">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="status-info">
+                                <h4>2</h4>
+                                <p>Alertas Ativos</p>
+                                <div class="status-detail">
+                                    <span class="text-small text-muted">TV Padaria offline</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos e Métricas -->
+            <div class="grid grid-2 gap-2 mb-4">
+                <!-- Gráfico de Tempo de Exibição -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Tempo de Exibição por Dia</h3>
+                        <select class="form-control form-select" style="width: 120px;">
+                            <option value="hours">Horas</option>
+                            <option value="minutes">Minutos</option>
+                        </select>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="displayTimeChart" height="300"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico de Artes Mais Exibidas -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Artes Mais Exibidas</h3>
+                        <select class="form-control form-select" style="width: 120px;">
+                            <option value="count">Quantidade</option>
+                            <option value="time">Tempo</option>
+                        </select>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="topArtsChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance por TV -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Performance por TV</h3>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>TV</th>
+                                <th>Status</th>
+                                <th>Tempo Online Hoje</th>
+                                <th>Artes Exibidas</th>
+                                <th>Última Atividade</th>
+                                <th>Performance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>TV Entrada Principal</strong>
+                                            <div class="text-small text-muted">Supermercado - Entrada</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Online
+                                    </span>
+                                </td>
+                                <td>
+                                    <strong>8h 45m</strong>
+                                    <div class="text-small text-muted">97% uptime</div>
+                                </td>
+                                <td>
+                                    <strong>156</strong>
+                                    <div class="text-small text-muted">12 playlists</div>
+                                </td>
+                                <td class="text-muted">Há 2 minutos</td>
+                                <td>
+                                    <div class="performance-indicator excellent">
+                                        <span>Excelente</span>
+                                        <div class="performance-bar">
+                                            <div class="performance-fill" style="width: 95%;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>TV Hortifrúti</strong>
+                                            <div class="text-small text-muted">Supermercado - Hortifrúti</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Online
+                                    </span>
+                                </td>
+                                <td>
+                                    <strong>8h 20m</strong>
+                                    <div class="text-small text-muted">92% uptime</div>
+                                </td>
+                                <td>
+                                    <strong>134</strong>
+                                    <div class="text-small text-muted">8 playlists</div>
+                                </td>
+                                <td class="text-muted">Há 5 minutos</td>
+                                <td>
+                                    <div class="performance-indicator good">
+                                        <span>Bom</span>
+                                        <div class="performance-bar">
+                                            <div class="performance-fill" style="width: 85%;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--text-light); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>TV Padaria</strong>
+                                            <div class="text-small text-muted">Padaria - Balcão</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status status-offline">
+                                        <i class="fas fa-circle"></i>
+                                        Offline
+                                    </span>
+                                </td>
+                                <td>
+                                    <strong>6h 15m</strong>
+                                    <div class="text-small text-muted">69% uptime</div>
+                                </td>
+                                <td>
+                                    <strong>89</strong>
+                                    <div class="text-small text-muted">5 playlists</div>
+                                </td>
+                                <td class="text-muted">Há 2 horas</td>
+                                <td>
+                                    <div class="performance-indicator poor">
+                                        <span>Ruim</span>
+                                        <div class="performance-bar">
+                                            <div class="performance-fill" style="width: 45%;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>TV Açougue</strong>
+                                            <div class="text-small text-muted">Supermercado - Açougue</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Online
+                                    </span>
+                                </td>
+                                <td>
+                                    <strong>8h 30m</strong>
+                                    <div class="text-small text-muted">94% uptime</div>
+                                </td>
+                                <td>
+                                    <strong>142</strong>
+                                    <div class="text-small text-muted">10 playlists</div>
+                                </td>
+                                <td class="text-muted">Há 1 minuto</td>
+                                <td>
+                                    <div class="performance-indicator good">
+                                        <span>Bom</span>
+                                        <div class="performance-bar">
+                                            <div class="performance-fill" style="width: 88%;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>TV Checkout</strong>
+                                            <div class="text-small text-muted">Supermercado - Caixas</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Online
+                                    </span>
+                                </td>
+                                <td>
+                                    <strong>9h 00m</strong>
+                                    <div class="text-small text-muted">100% uptime</div>
+                                </td>
+                                <td>
+                                    <strong>178</strong>
+                                    <div class="text-small text-muted">15 playlists</div>
+                                </td>
+                                <td class="text-muted">Há 3 minutos</td>
+                                <td>
+                                    <div class="performance-indicator excellent">
+                                        <span>Excelente</span>
+                                        <div class="performance-bar">
+                                            <div class="performance-fill" style="width: 98%;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Histórico de Publicações -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Histórico de Publicações</h3>
+                    <div class="d-flex gap-2">
+                        <input type="text" class="form-control" placeholder="Buscar..." style="width: 200px;">
+                        <select class="form-control form-select" style="width: 150px;">
+                            <option value="">Todos os tipos</option>
+                            <option value="playlist">Playlists</option>
+                            <option value="art">Artes</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Conteúdo</th>
+                                <th>TV</th>
+                                <th>Duração</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <strong>08/09/2024</strong>
+                                        <div class="text-small text-muted">14:30 - 15:00</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-image" style="color: var(--accent-color); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>Black Friday 2024</strong>
+                                            <div class="text-small text-muted">Arte individual</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Todas as TVs</td>
+                                <td>30 min</td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-check"></i>
+                                        Concluído
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <strong>08/09/2024</strong>
+                                        <div class="text-small text-muted">08:00 - 12:00</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-list" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>Ofertas do Dia</strong>
+                                            <div class="text-small text-muted">Playlist • 5 artes</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>TV Entrada, TV Checkout</td>
+                                <td>4h 00m</td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-check"></i>
+                                        Concluído
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <strong>07/09/2024</strong>
+                                        <div class="text-small text-muted">09:00 - 17:00</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-list" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <div>
+                                            <strong>Produtos Frescos</strong>
+                                            <div class="text-small text-muted">Playlist • 3 artes</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>TV Hortifrúti, TV Padaria</td>
+                                <td>8h 00m</td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-check"></i>
+                                        Concluído
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-secondary">Ver Mais Histórico</button>
+                </div>
+            </div>
+
+            <!-- Alertas e Notificações -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Alertas e Notificações</h3>
+                    <button class="btn btn-secondary btn-sm" onclick="markAllAsRead()">
+                        <i class="fas fa-check"></i>
+                        Marcar Todas como Lidas
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="alerts-list">
+                        <div class="alert-item warning">
+                            <div class="alert-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h4>TV Padaria Desconectada</h4>
+                                <p>A TV da padaria está offline há 2 horas. Verifique a conexão de rede.</p>
+                                <span class="alert-time">Há 2 horas</span>
+                            </div>
+                            <div class="alert-actions">
+                                <button class="btn btn-secondary btn-sm">Verificar</button>
+                                <button class="btn btn-danger btn-sm">Descartar</button>
+                            </div>
+                        </div>
+
+                        <div class="alert-item info">
+                            <div class="alert-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h4>Agendamento Concluído</h4>
+                                <p>A playlist "Black Friday 2024" foi executada com sucesso em todas as TVs.</p>
+                                <span class="alert-time">Há 30 minutos</span>
+                            </div>
+                            <div class="alert-actions">
+                                <button class="btn btn-secondary btn-sm">Ver Detalhes</button>
+                            </div>
+                        </div>
+
+                        <div class="alert-item success">
+                            <div class="alert-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h4>Sistema Atualizado</h4>
+                                <p>Todas as TVs foram atualizadas para a versão mais recente do sistema.</p>
+                                <span class="alert-time">Há 1 hora</span>
+                            </div>
+                            <div class="alert-actions">
+                                <button class="btn btn-secondary btn-sm">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <style>
+        /* Estilos específicos para relatórios */
+        .status-card {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            gap: 16px;
+        }
+
+        .status-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .status-info h4 {
+            margin: 0 0 4px 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .status-info p {
+            margin: 0 0 8px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .status-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-color);
+            transition: width 0.3s;
+        }
+
+        .status-detail {
+            margin-top: 4px;
+        }
+
+        /* Performance indicators */
+        .performance-indicator {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .performance-indicator span {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .performance-indicator.excellent span {
+            color: var(--accent-color);
+        }
+
+        .performance-indicator.good span {
+            color: var(--primary-color);
+        }
+
+        .performance-indicator.poor span {
+            color: var(--danger-color);
+        }
+
+        .performance-bar {
+            width: 80px;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .performance-fill {
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        .performance-indicator.excellent .performance-fill {
+            background: var(--accent-color);
+        }
+
+        .performance-indicator.good .performance-fill {
+            background: var(--primary-color);
+        }
+
+        .performance-indicator.poor .performance-fill {
+            background: var(--danger-color);
+        }
+
+        /* Alertas */
+        .alerts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 16px;
+            border-radius: var(--border-radius);
+            gap: 16px;
+        }
+
+        .alert-item.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .alert-item.info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .alert-item.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .alert-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .alert-item.warning .alert-icon {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .alert-item.info .alert-icon {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .alert-item.success .alert-icon {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-content h4 {
+            margin: 0 0 4px 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .alert-content p {
+            margin: 0 0 8px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .alert-time {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .alert-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .alert-item {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+
+    <script>
+        // Variáveis globais
+        let autoRefreshEnabled = false;
+        let autoRefreshInterval = null;
+        let displayTimeChart = null;
+        let topArtsChart = null;
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            updateLastUpdateTime();
+        });
+
+        // Inicializar gráficos
+        function initializeCharts() {
+            // Gráfico de tempo de exibição
+            const displayTimeCtx = document.getElementById('displayTimeChart').getContext('2d');
+            displayTimeChart = new Chart(displayTimeCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    datasets: [{
+                        label: 'Horas de Exibição',
+                        data: [8.5, 9.2, 8.8, 9.5, 9.1, 7.2, 6.8],
+                        borderColor: 'rgb(99, 102, 241)',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 12
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de artes mais exibidas
+            const topArtsCtx = document.getElementById('topArtsChart').getContext('2d');
+            topArtsChart = new Chart(topArtsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Black Friday', 'Ofertas do Dia', 'Produtos Frescos', 'Institucional', 'Outros'],
+                    datasets: [{
+                        data: [35, 25, 20, 12, 8],
+                        backgroundColor: [
+                            'rgb(99, 102, 241)',
+                            'rgb(16, 185, 129)',
+                            'rgb(245, 158, 11)',
+                            'rgb(239, 68, 68)',
+                            'rgb(156, 163, 175)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Atualizar período
+        function updatePeriod() {
+            const period = document.getElementById('periodFilter').value;
+            const customPeriod = document.getElementById('customPeriod');
+            
+            if (period === 'custom') {
+                customPeriod.style.display = 'flex';
+                customPeriod.style.alignItems = 'center';
+                customPeriod.style.gap = '8px';
+            } else {
+                customPeriod.style.display = 'none';
+            }
+            
+            // Atualizar dados baseado no período
+            updateChartsData(period);
+        }
+
+        // Atualizar dados dos gráficos
+        function updateChartsData(period) {
+            // Simular dados diferentes baseados no período
+            let newData, newLabels;
+            
+            switch (period) {
+                case 'today':
+                    newLabels = ['00h', '04h', '08h', '12h', '16h', '20h'];
+                    newData = [0, 0, 2.5, 4.2, 3.8, 1.5];
+                    break;
+                case 'week':
+                    newLabels = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+                    newData = [8.5, 9.2, 8.8, 9.5, 9.1, 7.2, 6.8];
+                    break;
+                case 'month':
+                    newLabels = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'];
+                    newData = [45.2, 48.5, 42.8, 38.9];
+                    break;
+                default:
+                    return;
+            }
+            
+            displayTimeChart.data.labels = newLabels;
+            displayTimeChart.data.datasets[0].data = newData;
+            displayTimeChart.update();
+        }
+
+        // Alternar auto-refresh
+        function toggleAutoRefresh() {
+            autoRefreshEnabled = !autoRefreshEnabled;
+            const icon = document.getElementById('autoRefreshIcon');
+            const text = document.getElementById('autoRefreshText');
+            
+            if (autoRefreshEnabled) {
+                icon.className = 'fas fa-clock text-success';
+                text.textContent = 'Auto-refresh: ON';
+                autoRefreshInterval = setInterval(refreshData, 30000); // 30 segundos
+            } else {
+                icon.className = 'fas fa-clock';
+                text.textContent = 'Auto-refresh: OFF';
+                if (autoRefreshInterval) {
+                    clearInterval(autoRefreshInterval);
+                }
+            }
+        }
+
+        // Atualizar dados
+        function refreshData() {
+            console.log('Atualizando dados...');
+            updateLastUpdateTime();
+            
+            // Simular atualização de dados
+            const statusCards = document.querySelectorAll('.status-card h4');
+            statusCards.forEach(card => {
+                const currentValue = parseInt(card.textContent);
+                const variation = Math.floor(Math.random() * 3) - 1; // -1, 0, ou 1
+                const newValue = Math.max(0, currentValue + variation);
+                card.textContent = newValue;
+            });
+        }
+
+        // Atualizar tempo da última atualização
+        function updateLastUpdateTime() {
+            document.getElementById('lastUpdate').textContent = 'agora';
+            
+            // Simular passagem do tempo
+            let minutes = 0;
+            setInterval(() => {
+                minutes++;
+                const lastUpdate = document.getElementById('lastUpdate');
+                if (lastUpdate) {
+                    lastUpdate.textContent = `há ${minutes} minuto${minutes > 1 ? 's' : ''}`;
+                }
+            }, 60000);
+        }
+
+        // Exportar relatório
+        function exportReport() {
+            const period = document.getElementById('periodFilter').value;
+            const tvFilter = document.getElementById('tvFilter').value;
+            
+            console.log('Exportando relatório:', { period, tvFilter });
+            alert('Relatório será exportado em formato PDF...');
+        }
+
+        // Marcar todos os alertas como lidos
+        function markAllAsRead() {
+            const alertItems = document.querySelectorAll('.alert-item');
+            alertItems.forEach(item => {
+                item.style.opacity = '0.6';
+            });
+            alert('Todos os alertas foram marcados como lidos.');
+        }
+
+        // Limpar dados antigos periodicamente
+        setInterval(() => {
+            console.log('Limpando dados antigos...');
+        }, 300000); // 5 minutos
+    </script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+

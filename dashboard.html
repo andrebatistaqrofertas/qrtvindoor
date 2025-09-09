@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR TV Indoor - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="images/logo.png" alt="QR TV Indoor" class="img-fluid">
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="tvs.html" class="nav-item">
+                    <i class="fas fa-tv"></i>
+                    Gerenciar TVs
+                </a>
+                <a href="biblioteca.html" class="nav-item">
+                    <i class="fas fa-images"></i>
+                    Biblioteca de Artes
+                </a>
+                <a href="playlists-list.html" class="nav-item">
+                    <i class="fas fa-list"></i>
+                    Playlists
+                </a>
+                <a href="agendamento.html" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    Agendamento
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Relatórios
+                </a>
+                <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--border-color);">
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Configurações
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1>Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary btn-sm">
+                        <i class="fas fa-bell"></i>
+                        Notificações
+                    </button>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Nova TV
+                    </button>
+                </div>
+            </header>
+
+            <!-- Cards de Resumo -->
+            <div class="grid grid-4 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 32px; color: var(--primary-color); margin-bottom: 8px;">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <h3 style="font-size: 24px; margin-bottom: 4px;">12</h3>
+                        <p class="text-muted">TVs Cadastradas</p>
+                        <div class="mt-2">
+                            <span class="status status-online">
+                                <i class="fas fa-circle"></i>
+                                10 Online
+                            </span>
+                            <span class="status status-offline" style="margin-left: 8px;">
+                                <i class="fas fa-circle"></i>
+                                2 Offline
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 32px; color: var(--accent-color); margin-bottom: 8px;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <h3 style="font-size: 24px; margin-bottom: 4px;">8</h3>
+                        <p class="text-muted">Playlists Ativas</p>
+                        <div class="mt-2">
+                            <span class="badge badge-success">Em Execução</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 32px; color: var(--warning-color); margin-bottom: 8px;">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <h3 style="font-size: 24px; margin-bottom: 4px;">24</h3>
+                        <p class="text-muted">Artes Agendadas Hoje</p>
+                        <div class="mt-2">
+                            <span class="text-small text-muted">Próxima: 14:30</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 32px; color: var(--danger-color); margin-bottom: 8px;">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <h3 style="font-size: 24px; margin-bottom: 4px;">156</h3>
+                        <p class="text-muted">Artes na Biblioteca</p>
+                        <div class="mt-2">
+                            <span class="badge badge-primary">+12 esta semana</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ações Rápidas -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 class="card-title">Ações Rápidas</h2>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-3 gap-2">
+                        <a href="tvs.html" class="btn btn-primary btn-lg">
+                            <i class="fas fa-tv"></i>
+                            Cadastrar Nova TV
+                        </a>
+                        <a href="playlists.html" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-plus"></i>
+                            Criar Playlist
+                        </a>
+                        <a href="relatorios.html" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-chart-line"></i>
+                            Ver Relatórios
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de TVs -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="card-title">TVs Cadastradas</h2>
+                    <div class="d-flex gap-2">
+                        <input type="text" class="form-control" placeholder="Buscar TV..." style="width: 200px;">
+                        <select class="form-control form-select" style="width: 150px;">
+                            <option value="">Todos os Status</option>
+                            <option value="online">Online</option>
+                            <option value="offline">Offline</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nome da TV</th>
+                                <th>Localização</th>
+                                <th>Status</th>
+                                <th>Playlist Atual</th>
+                                <th>Última Atualização</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <strong>TV Entrada Principal</strong>
+                                    </div>
+                                </td>
+                                <td>Supermercado - Entrada</td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Online
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-primary">Ofertas do Dia</span>
+                                </td>
+                                <td class="text-muted">Há 2 minutos</td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="fas fa-power-off"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <strong>TV Hortifrúti</strong>
+                                    </div>
+                                </td>
+                                <td>Supermercado - Seção Hortifrúti</td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Online
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-success">Frutas e Verduras</span>
+                                </td>
+                                <td class="text-muted">Há 5 minutos</td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="fas fa-power-off"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <strong>TV Padaria</strong>
+                                    </div>
+                                </td>
+                                <td>Padaria - Balcão</td>
+                                <td>
+                                    <span class="status status-offline">
+                                        <i class="fas fa-circle"></i>
+                                        Offline
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="text-muted">Nenhuma</span>
+                                </td>
+                                <td class="text-muted">Há 2 horas</td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-warning btn-sm">
+                                        <i class="fas fa-sync"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <strong>TV Açougue</strong>
+                                    </div>
+                                </td>
+                                <td>Supermercado - Açougue</td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Online
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-primary">Carnes Premium</span>
+                                </td>
+                                <td class="text-muted">Há 1 minuto</td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="fas fa-power-off"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv" style="color: var(--primary-color); margin-right: 8px;"></i>
+                                        <strong>TV Checkout</strong>
+                                    </div>
+                                </td>
+                                <td>Supermercado - Caixas</td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Online
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-success">Promoções Gerais</span>
+                                </td>
+                                <td class="text-muted">Há 3 minutos</td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="fas fa-power-off"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="tvs.html" class="btn btn-secondary">Ver Todas as TVs</a>
+                </div>
+            </div>
+
+            <!-- Atividade Recente -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h2 class="card-title">Atividade Recente</h2>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker" style="background-color: var(--accent-color);"></div>
+                            <div class="timeline-content">
+                                <strong>Playlist "Ofertas do Dia" iniciada</strong>
+                                <p class="text-muted text-small">TV Entrada Principal - Há 15 minutos</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker" style="background-color: var(--primary-color);"></div>
+                            <div class="timeline-content">
+                                <strong>Nova arte adicionada à biblioteca</strong>
+                                <p class="text-muted text-small">"Promoção Frutas Vermelhas" - Há 1 hora</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker" style="background-color: var(--warning-color);"></div>
+                            <div class="timeline-content">
+                                <strong>TV Padaria desconectada</strong>
+                                <p class="text-muted text-small">Verificar conexão - Há 2 horas</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker" style="background-color: var(--accent-color);"></div>
+                            <div class="timeline-content">
+                                <strong>Agendamento criado</strong>
+                                <p class="text-muted text-small">Playlist "Black Friday" para amanhã às 08:00 - Há 3 horas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <style>
+        /* Estilos específicos para o dashboard */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -23px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid var(--white);
+        }
+
+        .timeline-content {
+            padding-left: 16px;
+        }
+
+        .timeline-content strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+    </style>
+
+    <script>
+        // Funcionalidade básica para filtros
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filtro de busca
+            const searchInput = document.querySelector('input[placeholder="Buscar TV..."]');
+            const statusSelect = document.querySelector('select');
+            const tableRows = document.querySelectorAll('tbody tr');
+
+            function filterTable() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const statusFilter = statusSelect.value;
+
+                tableRows.forEach(row => {
+                    const tvName = row.querySelector('strong').textContent.toLowerCase();
+                    const location = row.cells[1].textContent.toLowerCase();
+                    const status = row.querySelector('.status').textContent.toLowerCase().includes('online') ? 'online' : 'offline';
+
+                    const matchesSearch = tvName.includes(searchTerm) || location.includes(searchTerm);
+                    const matchesStatus = !statusFilter || status === statusFilter;
+
+                    row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+                });
+            }
+
+            searchInput.addEventListener('input', filterTable);
+            statusSelect.addEventListener('change', filterTable);
+
+            // Atualização automática do status (simulação)
+            setInterval(() => {
+                const lastUpdateCells = document.querySelectorAll('td:nth-child(5)');
+                lastUpdateCells.forEach(cell => {
+                    if (cell.textContent.includes('minutos')) {
+                        const minutes = parseInt(cell.textContent.match(/\d+/)[0]) + 1;
+                        cell.textContent = `Há ${minutes} minutos`;
+                    }
+                });
+            }, 60000); // Atualiza a cada minuto
+        });
+    </script>
+    <script src="js/main.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+

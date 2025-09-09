@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR TV Indoor - Assinatura</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <a href="dashboard.html">
+                        <img src="img/logo.png" alt="QR TV Indoor Logo" style="height: 30px;">
+                    </a>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="tvs.html" class="nav-item">
+                    <i class="fas fa-tv"></i>
+                    Gerenciar TVs
+                </a>
+                <a href="biblioteca.html" class="nav-item">
+                    <i class="fas fa-images"></i>
+                    Biblioteca de Artes
+                </a>
+                <a href="playlists-list.html" class="nav-item">
+                    <i class="fas fa-list"></i>
+                    Playlists
+                </a>
+                <a href="agendamento.html" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    Agendamento
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Relatórios
+                </a>
+                <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--border-color);"><a href="assinatura.html" class="nav-item"><i class="fas fa-credit-card"></i>Assinatura</a>
+                <a href="assinatura.html" class="nav-item active">
+                    <i class="fas fa-credit-card"></i>
+                    Assinatura
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Configurações
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1>Gerenciar Assinatura</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="downloadInvoice()">
+                        <i class="fas fa-download"></i>
+                        Baixar Fatura
+                    </button>
+                    <button class="btn btn-primary" onclick="upgradeSubscription()">
+                        <i class="fas fa-arrow-up"></i>
+                        Upgrade
+                    </button>
+                </div>
+            </header>
+
+            <!-- Resumo da Assinatura -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                            <i class="fas fa-tv fa-2x mb-2"></i>
+                            <h3 class="mb-1">12</h3>
+                            <p class="mb-0">TVs Ativas</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <i class="fas fa-dollar-sign fa-2x mb-2"></i>
+                            <h3 class="mb-1">R$ 238,80</h3>
+                            <p class="mb-0">Valor Mensal</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                            <i class="fas fa-calendar fa-2x mb-2"></i>
+                            <h3 class="mb-1">15/10/2024</h3>
+                            <p class="mb-0">Próximo Vencimento</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plano Atual -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 class="card-title">Plano Atual</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="text-primary mb-2">Plano Profissional</h4>
+                            <p class="text-muted mb-2">Até 15 TVs • R$ 19,90 por TV/mês</p>
+                            <div class="progress mb-2" style="height: 8px;">
+                                <div class="progress-bar bg-primary" style="width: 80%"></div>
+                            </div>
+                            <small class="text-muted">12 de 15 slots utilizados</small>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <h3 class="text-success mb-0">R$ 238,80/mês</h3>
+                            <small class="text-muted">Próxima cobrança: 15/10/2024</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TVs Assinadas -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="card-title">TVs Assinadas</h2>
+                    <span class="badge badge-primary">12 TVs Ativas</span>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nome da TV</th>
+                                <th>Localização</th>
+                                <th>Status</th>
+                                <th>Data de Ativação</th>
+                                <th>Custo Mensal</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv text-primary me-2"></i>
+                                        <strong>TV Entrada Principal</strong>
+                                    </div>
+                                </td>
+                                <td>Supermercado - Entrada</td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Ativa
+                                    </span>
+                                </td>
+                                <td>01/09/2024</td>
+                                <td class="text-success">R$ 19,90</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" onclick="suspendTV('TV001')" title="Suspender">
+                                        <i class="fas fa-pause"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv text-primary me-2"></i>
+                                        <strong>TV Hortifrúti</strong>
+                                    </div>
+                                </td>
+                                <td>Supermercado - Seção Hortifrúti</td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Ativa
+                                    </span>
+                                </td>
+                                <td>01/09/2024</td>
+                                <td class="text-success">R$ 19,90</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" onclick="suspendTV('TV002')" title="Suspender">
+                                        <i class="fas fa-pause"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv text-warning me-2"></i>
+                                        <strong>TV Padaria</strong>
+                                    </div>
+                                </td>
+                                <td>Padaria - Balcão</td>
+                                <td>
+                                    <span class="status status-warning">
+                                        <i class="fas fa-circle"></i>
+                                        Suspensa
+                                    </span>
+                                </td>
+                                <td>01/09/2024</td>
+                                <td class="text-muted">R$ 0,00</td>
+                                <td>
+                                    <button class="btn btn-success btn-sm" onclick="reactivateTV('TV003')" title="Reativar">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv text-primary me-2"></i>
+                                        <strong>TV Açougue</strong>
+                                    </div>
+                                </td>
+                                <td>Supermercado - Açougue</td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Ativa
+                                    </span>
+                                </td>
+                                <td>05/09/2024</td>
+                                <td class="text-success">R$ 19,90</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" onclick="suspendTV('TV004')" title="Suspender">
+                                        <i class="fas fa-pause"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tv text-primary me-2"></i>
+                                        <strong>TV Checkout</strong>
+                                    </div>
+                                </td>
+                                <td>Supermercado - Caixas</td>
+                                <td>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Ativa
+                                    </span>
+                                </td>
+                                <td>10/09/2024</td>
+                                <td class="text-success">R$ 19,90</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" onclick="suspendTV('TV005')" title="Suspender">
+                                        <i class="fas fa-pause"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Histórico de Pagamentos -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="card-title">Histórico de Pagamentos</h2>
+                    <button class="btn btn-secondary btn-sm" onclick="exportPayments()">
+                        <i class="fas fa-download"></i>
+                        Exportar
+                    </button>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>TVs Ativas</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>15/09/2024</td>
+                                <td>Assinatura Mensal - Setembro 2024</td>
+                                <td>12 TVs</td>
+                                <td class="text-success">R$ 238,80</td>
+                                <td>
+                                    <span class="badge badge-success">Pago</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm" onclick="downloadInvoice('202409')" title="Baixar Fatura">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>15/08/2024</td>
+                                <td>Assinatura Mensal - Agosto 2024</td>
+                                <td>10 TVs</td>
+                                <td class="text-success">R$ 199,00</td>
+                                <td>
+                                    <span class="badge badge-success">Pago</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm" onclick="downloadInvoice('202408')" title="Baixar Fatura">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>15/07/2024</td>
+                                <td>Assinatura Mensal - Julho 2024</td>
+                                <td>8 TVs</td>
+                                <td class="text-success">R$ 159,20</td>
+                                <td>
+                                    <span class="badge badge-success">Pago</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm" onclick="downloadInvoice('202407')" title="Baixar Fatura">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Método de Pagamento -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="card-title">Método de Pagamento</h2>
+                    <button class="btn btn-primary btn-sm" onclick="updatePaymentMethod()">
+                        <i class="fas fa-edit"></i>
+                        Alterar
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="payment-method-icon me-3">
+                            <i class="fab fa-cc-visa fa-2x text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">Cartão de Crédito</h5>
+                            <p class="text-muted mb-0">**** **** **** 1234</p>
+                            <small class="text-muted">Válido até 12/2027</small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge badge-success">Ativo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Planos Disponíveis -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Planos Disponíveis</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card border">
+                                <div class="card-body text-center">
+                                    <h4 class="text-primary">Básico</h4>
+                                    <h2 class="text-success">R$ 19,90</h2>
+                                    <p class="text-muted">por TV/mês</p>
+                                    <ul class="list-unstyled text-start">
+                                        <li><i class="fas fa-check text-success me-2"></i>Até 5 TVs</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Suporte básico</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Relatórios mensais</li>
+                                    </ul>
+                                    <button class="btn btn-outline-primary" disabled>Plano Atual</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-primary">
+                                <div class="card-body text-center">
+                                    <div class="badge badge-primary mb-2">Atual</div>
+                                    <h4 class="text-primary">Profissional</h4>
+                                    <h2 class="text-success">R$ 19,90</h2>
+                                    <p class="text-muted">por TV/mês</p>
+                                    <ul class="list-unstyled text-start">
+                                        <li><i class="fas fa-check text-success me-2"></i>Até 15 TVs</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Suporte prioritário</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Relatórios avançados</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Agendamento automático</li>
+                                    </ul>
+                                    <button class="btn btn-primary" disabled>Plano Ativo</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border">
+                                <div class="card-body text-center">
+                                    <h4 class="text-primary">Empresarial</h4>
+                                    <h2 class="text-success">R$ 17,90</h2>
+                                    <p class="text-muted">por TV/mês</p>
+                                    <ul class="list-unstyled text-start">
+                                        <li><i class="fas fa-check text-success me-2"></i>TVs ilimitadas</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Suporte 24/7</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Relatórios personalizados</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>API personalizada</li>
+                                    </ul>
+                                    <button class="btn btn-primary" onclick="upgradePlan('empresarial')">Fazer Upgrade</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Funções específicas da página de assinatura
+        function suspendTV(tvId) {
+            if (confirm(`Tem certeza que deseja suspender a TV ${tvId}? Isso interromperá a cobrança mensal.`)) {
+                showNotification(`TV ${tvId} suspensa com sucesso!`, 'warning');
+                // Lógica para suspender a TV
+            }
+        }
+
+        function reactivateTV(tvId) {
+            if (confirm(`Tem certeza que deseja reativar a TV ${tvId}? A cobrança mensal será retomada.`)) {
+                showNotification(`TV ${tvId} reativada com sucesso!`, 'success');
+                // Lógica para reativar a TV
+            }
+        }
+
+        function downloadInvoice(period = null) {
+            const periodText = period ? ` de ${period}` : '';
+            showNotification(`Baixando fatura${periodText}...`, 'info');
+            // Lógica para download da fatura
+        }
+
+        function exportPayments() {
+            showNotification('Exportando histórico de pagamentos...', 'info');
+            // Lógica para exportar pagamentos
+        }
+
+        function updatePaymentMethod() {
+            showNotification('Redirecionando para atualização do método de pagamento...', 'info');
+            // Lógica para atualizar método de pagamento
+        }
+
+        function upgradeSubscription() {
+            showNotification('Redirecionando para upgrade da assinatura...', 'info');
+            // Lógica para upgrade
+        }
+
+        function upgradePlan(planType) {
+            if (confirm(`Tem certeza que deseja fazer upgrade para o plano ${planType}?`)) {
+                showNotification(`Processando upgrade para o plano ${planType}...`, 'info');
+                // Lógica para upgrade do plano
+            }
+        }
+    </script>
+</body>
+</html>
+

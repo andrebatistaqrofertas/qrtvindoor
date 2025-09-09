@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR TV Indoor - Playlists</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-tv"></i> QR TV Indoor
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="tvs.html" class="nav-item">
+                    <i class="fas fa-tv"></i>
+                    Gerenciar TVs
+                </a>
+                <a href="biblioteca.html" class="nav-item">
+                    <i class="fas fa-images"></i>
+                    Biblioteca de Artes
+                </a>
+                <a href="playlists-list.html" class="nav-item active">
+                    <i class="fas fa-list"></i>
+                    Playlists
+                </a>
+                <a href="agendamento.html" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    Agendamento
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Relatórios
+                </a>
+                <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--border-color);">
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Configurações
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1>Playlists</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-download"></i>
+                        Exportar
+                    </button>
+                    <a href="playlists.html" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Nova Playlist
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-4 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="color: var(--primary-color); font-size: 2rem; margin-bottom: 8px;">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <h3 style="margin: 0; font-size: 2rem; font-weight: 700;">24</h3>
+                        <p style="margin: 0; color: var(--text-secondary);">Total de Playlists</p>
+                        <small style="color: var(--accent-color);">+3 esta semana</small>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="color: var(--accent-color); font-size: 2rem; margin-bottom: 8px;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <h3 style="margin: 0; font-size: 2rem; font-weight: 700;">8</h3>
+                        <p style="margin: 0; color: var(--text-secondary);">Ativas Agora</p>
+                        <small style="color: var(--text-light);">Em execução</small>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="color: var(--warning-color); font-size: 2rem; margin-bottom: 8px;">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 style="margin: 0; font-size: 2rem; font-weight: 700;">156</h3>
+                        <p style="margin: 0; color: var(--text-secondary);">Minutos Totais</p>
+                        <small style="color: var(--text-light);">Duração média: 6.5 min</small>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="color: var(--info-color); font-size: 2rem; margin-bottom: 8px;">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3 style="margin: 0; font-size: 2rem; font-weight: 700;">12</h3>
+                        <p style="margin: 0; color: var(--text-secondary);">Favoritas</p>
+                        <small style="color: var(--text-light);">Mais utilizadas</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="grid grid-4 gap-2">
+                        <div class="form-group mb-0">
+                            <label class="form-label">Buscar</label>
+                            <input type="text" class="form-control" placeholder="Nome da playlist...">
+                        </div>
+                        <div class="form-group mb-0">
+                            <label class="form-label">Categoria</label>
+                            <select class="form-control form-select">
+                                <option>Todas as categorias</option>
+                                <option>Promoções</option>
+                                <option>Ofertas</option>
+                                <option>Institucional</option>
+                                <option>Sazonal</option>
+                                <option>Produtos</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label class="form-label">Status</label>
+                            <select class="form-control form-select">
+                                <option>Todos os status</option>
+                                <option>Ativa</option>
+                                <option>Pausada</option>
+                                <option>Agendada</option>
+                                <option>Rascunho</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label class="form-label">Ações</label>
+                            <button class="btn btn-secondary" style="width: 100%;">
+                                <i class="fas fa-times"></i>
+                                Limpar Filtros
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Playlists Grid -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="card-title">Playlists Criadas (24)</h3>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-3 gap-2">
+                        <!-- Playlist Card 1 -->
+                        <div class="card" style="border: 1px solid var(--border-color);">
+                            <div class="card-body">
+                                <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div style="flex: 1;">
+                                        <h4 style="margin: 0 0 4px 0; font-size: 16px;">Ofertas do Dia</h4>
+                                        <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Promoções</p>
+                                    </div>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Ativa
+                                    </span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light);">
+                                        <span><i class="fas fa-images"></i> 5 artes</span>
+                                        <span><i class="fas fa-clock"></i> 2m 30s</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-sm btn-primary" style="flex: 1;" onclick="window.location.href='playlists.html'">
+                                        <i class="fas fa-edit"></i>
+                                        Editar
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Playlist Card 2 -->
+                        <div class="card" style="border: 1px solid var(--border-color);">
+                            <div class="card-body">
+                                <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div style="flex: 1;">
+                                        <h4 style="margin: 0 0 4px 0; font-size: 16px;">Black Friday 2024</h4>
+                                        <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Ofertas</p>
+                                    </div>
+                                    <span class="status status-pending">
+                                        <i class="fas fa-clock"></i>
+                                        Agendada
+                                    </span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light);">
+                                        <span><i class="fas fa-images"></i> 8 artes</span>
+                                        <span><i class="fas fa-clock"></i> 4m 20s</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-sm btn-primary" style="flex: 1;" onclick="window.location.href='playlists.html'">
+                                        <i class="fas fa-edit"></i>
+                                        Editar
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Playlist Card 3 -->
+                        <div class="card" style="border: 1px solid var(--border-color);">
+                            <div class="card-body">
+                                <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div style="flex: 1;">
+                                        <h4 style="margin: 0 0 4px 0; font-size: 16px;">Produtos Frescos</h4>
+                                        <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Produtos</p>
+                                    </div>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Ativa
+                                    </span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light);">
+                                        <span><i class="fas fa-images"></i> 3 artes</span>
+                                        <span><i class="fas fa-clock"></i> 1m 45s</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-sm btn-primary" style="flex: 1;" onclick="window.location.href='playlists.html'">
+                                        <i class="fas fa-edit"></i>
+                                        Editar
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Playlist Card 4 -->
+                        <div class="card" style="border: 1px solid var(--border-color);">
+                            <div class="card-body">
+                                <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div style="flex: 1;">
+                                        <h4 style="margin: 0 0 4px 0; font-size: 16px;">Institucional</h4>
+                                        <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Institucional</p>
+                                    </div>
+                                    <span class="status status-offline">
+                                        <i class="fas fa-pause"></i>
+                                        Pausada
+                                    </span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light);">
+                                        <span><i class="fas fa-images"></i> 6 artes</span>
+                                        <span><i class="fas fa-clock"></i> 3m 15s</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-sm btn-primary" style="flex: 1;" onclick="window.location.href='playlists.html'">
+                                        <i class="fas fa-edit"></i>
+                                        Editar
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Playlist Card 5 -->
+                        <div class="card" style="border: 1px solid var(--border-color);">
+                            <div class="card-body">
+                                <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div style="flex: 1;">
+                                        <h4 style="margin: 0 0 4px 0; font-size: 16px;">Primavera 2024</h4>
+                                        <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Sazonal</p>
+                                    </div>
+                                    <span class="status status-online">
+                                        <i class="fas fa-circle"></i>
+                                        Ativa
+                                    </span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light);">
+                                        <span><i class="fas fa-images"></i> 4 artes</span>
+                                        <span><i class="fas fa-clock"></i> 2m 10s</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-sm btn-primary" style="flex: 1;" onclick="window.location.href='playlists.html'">
+                                        <i class="fas fa-edit"></i>
+                                        Editar
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Playlist Card 6 -->
+                        <div class="card" style="border: 1px solid var(--border-color);">
+                            <div class="card-body">
+                                <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div style="flex: 1;">
+                                        <h4 style="margin: 0 0 4px 0; font-size: 16px;">Açougue Premium</h4>
+                                        <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Produtos</p>
+                                    </div>
+                                    <span class="status status-pending">
+                                        <i class="fas fa-edit"></i>
+                                        Rascunho
+                                    </span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light);">
+                                        <span><i class="fas fa-images"></i> 2 artes</span>
+                                        <span><i class="fas fa-clock"></i> 1m 20s</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-sm btn-primary" style="flex: 1;" onclick="window.location.href='playlists.html'">
+                                        <i class="fas fa-edit"></i>
+                                        Editar
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div style="margin-top: 24px; display: flex; justify-content: between; align-items: center;">
+                        <p style="margin: 0; color: var(--text-secondary);">
+                            Mostrando 1-6 de 24 playlists
+                        </p>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-sm btn-secondary">Anterior</button>
+                            <button class="btn btn-sm btn-primary">1</button>
+                            <button class="btn btn-sm btn-secondary">2</button>
+                            <button class="btn btn-sm btn-secondary">3</button>
+                            <button class="btn btn-sm btn-secondary">4</button>
+                            <button class="btn btn-sm btn-secondary">Próxima</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
+

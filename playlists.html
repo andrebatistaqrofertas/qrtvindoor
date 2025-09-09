@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR TV Indoor - Criar Playlist</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+</head>
+<body>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-tv"></i> QR TV Indoor
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="tvs.html" class="nav-item">
+                    <i class="fas fa-tv"></i>
+                    Gerenciar TVs
+                </a>
+                <a href="biblioteca.html" class="nav-item">
+                    <i class="fas fa-images"></i>
+                    Biblioteca de Artes
+                </a>
+                <a href="playlists-list.html" class="nav-item">
+                    <i class="fas fa-list"></i>
+                    Playlists
+                </a>
+                <a href="agendamento.html" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    Agendamento
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Relatórios
+                </a>
+                <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--border-color);">
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Configurações
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1>Criar Playlist</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="previewPlaylist()">
+                        <i class="fas fa-play"></i>
+                        Preview
+                    </button>
+                    <button class="btn btn-success" onclick="savePlaylist()">
+                        <i class="fas fa-save"></i>
+                        Salvar Playlist
+                    </button>
+                </div>
+            </header>
+
+            <!-- Informações da Playlist -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 class="card-title">Informações da Playlist</h2>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-3 gap-2">
+                        <div class="form-group">
+                            <label class="form-label">Nome da Playlist *</label>
+                            <input type="text" class="form-control" id="playlistName" placeholder="Ex: Ofertas do Dia" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Categoria</label>
+                            <select class="form-control form-select" id="playlistCategory">
+                                <option value="">Selecione uma categoria</option>
+                                <option value="promocoes">Promoções</option>
+                                <option value="ofertas">Ofertas</option>
+                                <option value="institucional">Institucional</option>
+                                <option value="sazonal">Sazonal</option>
+                                <option value="produtos">Produtos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Duração Total</label>
+                            <input type="text" class="form-control" id="totalDuration" readonly placeholder="0 min 0 seg">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" id="playlistDescription" rows="2" placeholder="Descrição opcional da playlist..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Editor de Playlist -->
+            <div class="grid grid-2 gap-2">
+                <!-- Painel Esquerdo - Artes Disponíveis -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Artes Disponíveis</h3>
+                        <div class="d-flex gap-2">
+                            <input type="text" class="form-control" id="searchArts" placeholder="Buscar artes..." style="width: 200px;">
+                            <select class="form-control form-select" id="filterCategory" style="width: 150px;">
+                                <option value="">Todas</option>
+                                <option value="promocoes">Promoções</option>
+                                <option value="ofertas">Ofertas</option>
+                                <option value="institucional">Institucional</option>
+                                <option value="sazonal">Sazonal</option>
+                                <option value="produtos">Produtos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+                        <div id="availableArts" class="arts-list">
+                            <!-- Arte 1 -->
+                            <div class="art-item" data-category="promocoes" data-id="art1" draggable="true">
+                                <div class="art-thumbnail">
+                                    <div class="art-placeholder-small">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                </div>
+                                <div class="art-info">
+                                    <h4>Promoção Frutas Vermelhas</h4>
+                                    <p class="text-muted text-small">Campanha: Ofertas de Setembro</p>
+                                    <span class="badge badge-primary">Promoções</span>
+                                </div>
+                                <div class="art-actions">
+                                    <button class="btn btn-primary btn-sm" onclick="addToPlaylist('art1')">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Arte 2 -->
+                            <div class="art-item" data-category="ofertas" data-id="art2" draggable="true">
+                                <div class="art-thumbnail">
+                                    <div class="art-placeholder-small" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </div>
+                                </div>
+                                <div class="art-info">
+                                    <h4>Black Friday 2024</h4>
+                                    <p class="text-muted text-small">Campanha: Black Friday</p>
+                                    <span class="badge badge-success">Ofertas</span>
+                                </div>
+                                <div class="art-actions">
+                                    <button class="btn btn-primary btn-sm" onclick="addToPlaylist('art2')">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Arte 3 -->
+                            <div class="art-item" data-category="institucional" data-id="art3" draggable="true">
+                                <div class="art-thumbnail">
+                                    <div class="art-placeholder-small" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                        <i class="fas fa-heart"></i>
+                                    </div>
+                                </div>
+                                <div class="art-info">
+                                    <h4>Mensagem de Boas-vindas</h4>
+                                    <p class="text-muted text-small">Campanha: Institucional</p>
+                                    <span class="badge badge-primary">Institucional</span>
+                                </div>
+                                <div class="art-actions">
+                                    <button class="btn btn-primary btn-sm" onclick="addToPlaylist('art3')">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Arte 4 -->
+                            <div class="art-item" data-category="produtos" data-id="art4" draggable="true">
+                                <div class="art-thumbnail">
+                                    <div class="art-placeholder-small" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                        <i class="fas fa-bread-slice"></i>
+                                    </div>
+                                </div>
+                                <div class="art-info">
+                                    <h4>Padaria - Pães Frescos</h4>
+                                    <p class="text-muted text-small">Campanha: Produtos Frescos</p>
+                                    <span class="badge badge-success">Produtos</span>
+                                </div>
+                                <div class="art-actions">
+                                    <button class="btn btn-primary btn-sm" onclick="addToPlaylist('art4')">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Arte 5 -->
+                            <div class="art-item" data-category="sazonal" data-id="art5" draggable="true">
+                                <div class="art-thumbnail">
+                                    <div class="art-placeholder-small" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                                        <i class="fas fa-leaf"></i>
+                                    </div>
+                                </div>
+                                <div class="art-info">
+                                    <h4>Chegada da Primavera</h4>
+                                    <p class="text-muted text-small">Campanha: Estações do Ano</p>
+                                    <span class="badge badge-success">Sazonal</span>
+                                </div>
+                                <div class="art-actions">
+                                    <button class="btn btn-primary btn-sm" onclick="addToPlaylist('art5')">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Arte 6 -->
+                            <div class="art-item" data-category="promocoes" data-id="art6" draggable="true">
+                                <div class="art-thumbnail">
+                                    <div class="art-placeholder-small" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                                        <i class="fas fa-percent"></i>
+                                    </div>
+                                </div>
+                                <div class="art-info">
+                                    <h4>Desconto Especial Carnes</h4>
+                                    <p class="text-muted text-small">Campanha: Açougue Premium</p>
+                                    <span class="badge badge-primary">Promoções</span>
+                                </div>
+                                <div class="art-actions">
+                                    <button class="btn btn-primary btn-sm" onclick="addToPlaylist('art6')">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel Direito - Sequência da Playlist -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Sequência da Playlist</h3>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-secondary btn-sm" onclick="clearPlaylist()">
+                                <i class="fas fa-trash"></i>
+                                Limpar
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="shufflePlaylist()">
+                                <i class="fas fa-random"></i>
+                                Embaralhar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body" style="min-height: 400px;">
+                        <div id="playlistSequence" class="playlist-sequence">
+                            <div class="empty-playlist">
+                                <i class="fas fa-list" style="font-size: 48px; color: var(--text-light); margin-bottom: 16px;"></i>
+                                <p class="text-muted">Arraste artes aqui para criar sua playlist</p>
+                                <p class="text-small text-muted">ou clique no botão + ao lado de cada arte</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configurações de Exibição -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Configurações de Exibição</h3>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-3 gap-2">
+                        <div class="form-group">
+                            <label class="form-label">Duração Padrão por Arte</label>
+                            <select class="form-control form-select" id="defaultDuration">
+                                <option value="5">5 segundos</option>
+                                <option value="10" selected>10 segundos</option>
+                                <option value="15">15 segundos</option>
+                                <option value="20">20 segundos</option>
+                                <option value="30">30 segundos</option>
+                                <option value="60">1 minuto</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Efeito de Transição</label>
+                            <select class="form-control form-select" id="transitionEffect">
+                                <option value="none">Sem transição</option>
+                                <option value="fade" selected>Fade</option>
+                                <option value="slide-left">Deslizar para esquerda</option>
+                                <option value="slide-right">Deslizar para direita</option>
+                                <option value="slide-up">Deslizar para cima</option>
+                                <option value="slide-down">Deslizar para baixo</option>
+                                <option value="zoom">Zoom</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Duração da Transição</label>
+                            <select class="form-control form-select" id="transitionDuration">
+                                <option value="0.3">0.3 segundos</option>
+                                <option value="0.5" selected>0.5 segundos</option>
+                                <option value="1">1 segundo</option>
+                                <option value="1.5">1.5 segundos</option>
+                                <option value="2">2 segundos</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-2 gap-2 mt-3">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="loopPlaylist" checked>
+                                Repetir playlist em loop
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="randomOrder">
+                                Ordem aleatória
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview da Playlist -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Preview da Playlist</h3>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary btn-sm" onclick="startPreview()">
+                            <i class="fas fa-play"></i>
+                            Iniciar Preview
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="stopPreview()">
+                            <i class="fas fa-stop"></i>
+                            Parar
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="preview-container">
+                        <div class="preview-screen">
+                            <div class="preview-placeholder">
+                                <i class="fas fa-tv" style="font-size: 64px; color: var(--text-light);"></i>
+                                <p class="text-muted mt-3">Preview da playlist aparecerá aqui</p>
+                            </div>
+                        </div>
+                        <div class="preview-controls">
+                            <div class="preview-info">
+                                <p><strong>Arte atual:</strong> <span id="currentArtName">-</span></p>
+                                <p><strong>Posição:</strong> <span id="currentPosition">0 / 0</span></p>
+                                <p><strong>Tempo restante:</strong> <span id="timeRemaining">-</span></p>
+                            </div>
+                            <div class="preview-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progressFill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <style>
+        /* Estilos específicos para criação de playlist */
+        .arts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .art-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background: var(--white);
+            cursor: grab;
+            transition: all 0.2s;
+        }
+
+        .art-item:hover {
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-1px);
+        }
+
+        .art-item.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        .art-thumbnail {
+            width: 60px;
+            height: 40px;
+            margin-right: 12px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .art-placeholder-small {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .art-info {
+            flex: 1;
+        }
+
+        .art-info h4 {
+            margin: 0 0 4px 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .art-actions {
+            margin-left: 12px;
+        }
+
+        .playlist-sequence {
+            min-height: 400px;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+        }
+
+        .empty-playlist {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background: var(--white);
+            cursor: grab;
+        }
+
+        .playlist-item:hover {
+            box-shadow: var(--shadow-sm);
+        }
+
+        .playlist-item.sortable-ghost {
+            opacity: 0.4;
+        }
+
+        .playlist-number {
+            width: 30px;
+            height: 30px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            margin-right: 12px;
+        }
+
+        .playlist-item-info {
+            flex: 1;
+            margin-left: 12px;
+        }
+
+        .playlist-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .duration-input {
+            width: 80px;
+            padding: 4px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .preview-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .preview-screen {
+            width: 100%;
+            height: 300px;
+            background: #000;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-placeholder {
+            text-align: center;
+            color: #666;
+        }
+
+        .preview-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .preview-info {
+            flex: 1;
+        }
+
+        .preview-info p {
+            margin: 4px 0;
+            font-size: 14px;
+        }
+
+        .preview-progress {
+            flex: 1;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* Drag and drop styles */
+        .drag-over {
+            border-color: var(--primary-color);
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .art-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .art-thumbnail {
+                margin: 0 0 8px 0;
+            }
+        }
+    </style>
+
+    <script>
+        // Variáveis globais
+        let playlistItems = [];
+        let previewInterval = null;
+        let currentPreviewIndex = 0;
+        let sortableInstance = null;
+
+        // Dados das artes (simulação)
+        const artsData = {
+            'art1': { name: 'Promoção Frutas Vermelhas', category: 'promocoes', campaign: 'Ofertas de Setembro' },
+            'art2': { name: 'Black Friday 2024', category: 'ofertas', campaign: 'Black Friday' },
+            'art3': { name: 'Mensagem de Boas-vindas', category: 'institucional', campaign: 'Institucional' },
+            'art4': { name: 'Padaria - Pães Frescos', category: 'produtos', campaign: 'Produtos Frescos' },
+            'art5': { name: 'Chegada da Primavera', category: 'sazonal', campaign: 'Estações do Ano' },
+            'art6': { name: 'Desconto Especial Carnes', category: 'promocoes', campaign: 'Açougue Premium' }
+        };
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            setupDragAndDrop();
+            setupFilters();
+            setupPlaylistSequence();
+            updateTotalDuration();
+        });
+
+        // Configurar drag and drop
+        function setupDragAndDrop() {
+            const availableArts = document.querySelectorAll('.art-item');
+            const playlistSequence = document.getElementById('playlistSequence');
+
+            // Configurar drag para artes disponíveis
+            availableArts.forEach(item => {
+                item.addEventListener('dragstart', function(e) {
+                    e.dataTransfer.setData('text/plain', this.dataset.id);
+                    this.classList.add('dragging');
+                });
+
+                item.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                });
+            });
+
+            // Configurar drop na playlist
+            playlistSequence.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
+            });
+
+            playlistSequence.addEventListener('dragleave', function() {
+                this.classList.remove('drag-over');
+            });
+
+            playlistSequence.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                const artId = e.dataTransfer.getData('text/plain');
+                addToPlaylist(artId);
+            });
+        }
+
+        // Configurar filtros
+        function setupFilters() {
+            const searchInput = document.getElementById('searchArts');
+            const categoryFilter = document.getElementById('filterCategory');
+
+            [searchInput, categoryFilter].forEach(element => {
+                element.addEventListener('input', filterAvailableArts);
+                element.addEventListener('change', filterAvailableArts);
+            });
+        }
+
+        // Configurar sequência da playlist (sortable)
+        function setupPlaylistSequence() {
+            const playlistContainer = document.getElementById('playlistSequence');
+            
+            sortableInstance = Sortable.create(playlistContainer, {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                onEnd: function(evt) {
+                    // Reordenar array de itens
+                    const item = playlistItems.splice(evt.oldIndex, 1)[0];
+                    playlistItems.splice(evt.newIndex, 0, item);
+                    updatePlaylistNumbers();
+                    updateTotalDuration();
+                }
+            });
+        }
+
+        // Filtrar artes disponíveis
+        function filterAvailableArts() {
+            const searchTerm = document.getElementById('searchArts').value.toLowerCase();
+            const categoryFilter = document.getElementById('filterCategory').value;
+            const artItems = document.querySelectorAll('.art-item');
+
+            artItems.forEach(item => {
+                const artData = artsData[item.dataset.id];
+                const matchesSearch = artData.name.toLowerCase().includes(searchTerm);
+                const matchesCategory = !categoryFilter || artData.category === categoryFilter;
+
+                item.style.display = matchesSearch && matchesCategory ? 'flex' : 'none';
+            });
+        }
+
+        // Adicionar arte à playlist
+        function addToPlaylist(artId) {
+            const artData = artsData[artId];
+            if (!artData) return;
+
+            // Verificar se já existe na playlist
+            if (playlistItems.find(item => item.id === artId)) {
+                alert('Esta arte já está na playlist!');
+                return;
+            }
+
+            const defaultDuration = parseInt(document.getElementById('defaultDuration').value);
+            
+            const playlistItem = {
+                id: artId,
+                name: artData.name,
+                category: artData.category,
+                campaign: artData.campaign,
+                duration: defaultDuration
+            };
+
+            playlistItems.push(playlistItem);
+            renderPlaylistSequence();
+            updateTotalDuration();
+        }
+
+        // Renderizar sequência da playlist
+        function renderPlaylistSequence() {
+            const container = document.getElementById('playlistSequence');
+            
+            if (playlistItems.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-playlist">
+                        <i class="fas fa-list" style="font-size: 48px; color: var(--text-light); margin-bottom: 16px;"></i>
+                        <p class="text-muted">Arraste artes aqui para criar sua playlist</p>
+                        <p class="text-small text-muted">ou clique no botão + ao lado de cada arte</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = playlistItems.map((item, index) => `
+                <div class="playlist-item" data-id="${item.id}">
+                    <div class="playlist-number">${index + 1}</div>
+                    <div class="art-thumbnail">
+                        <div class="art-placeholder-small">
+                            <i class="fas fa-image"></i>
+                        </div>
+                    </div>
+                    <div class="playlist-item-info">
+                        <h4>${item.name}</h4>
+                        <p class="text-muted text-small">${item.campaign}</p>
+                    </div>
+                    <div class="playlist-item-controls">
+                        <input type="number" class="duration-input" value="${item.duration}" min="1" max="300" 
+                               onchange="updateItemDuration('${item.id}', this.value)">
+                        <span class="text-small text-muted">seg</span>
+                        <button class="btn btn-danger btn-sm" onclick="removeFromPlaylist('${item.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Atualizar números da playlist
+        function updatePlaylistNumbers() {
+            const numbers = document.querySelectorAll('.playlist-number');
+            numbers.forEach((number, index) => {
+                number.textContent = index + 1;
+            });
+        }
+
+        // Atualizar duração de um item
+        function updateItemDuration(artId, newDuration) {
+            const item = playlistItems.find(item => item.id === artId);
+            if (item) {
+                item.duration = parseInt(newDuration);
+                updateTotalDuration();
+            }
+        }
+
+        // Remover da playlist
+        function removeFromPlaylist(artId) {
+            playlistItems = playlistItems.filter(item => item.id !== artId);
+            renderPlaylistSequence();
+            updateTotalDuration();
+        }
+
+        // Limpar playlist
+        function clearPlaylist() {
+            if (playlistItems.length > 0 && confirm('Deseja limpar toda a playlist?')) {
+                playlistItems = [];
+                renderPlaylistSequence();
+                updateTotalDuration();
+            }
+        }
+
+        // Embaralhar playlist
+        function shufflePlaylist() {
+            if (playlistItems.length > 1) {
+                for (let i = playlistItems.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [playlistItems[i], playlistItems[j]] = [playlistItems[j], playlistItems[i]];
+                }
+                renderPlaylistSequence();
+            }
+        }
+
+        // Atualizar duração total
+        function updateTotalDuration() {
+            const totalSeconds = playlistItems.reduce((total, item) => total + item.duration, 0);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            
+            document.getElementById('totalDuration').value = `${minutes} min ${seconds} seg`;
+        }
+
+        // Iniciar preview
+        function startPreview() {
+            if (playlistItems.length === 0) {
+                alert('Adicione pelo menos uma arte à playlist para fazer o preview.');
+                return;
+            }
+
+            stopPreview();
+            currentPreviewIndex = 0;
+            showPreviewArt();
+            
+            previewInterval = setInterval(() => {
+                currentPreviewIndex = (currentPreviewIndex + 1) % playlistItems.length;
+                showPreviewArt();
+            }, playlistItems[currentPreviewIndex]?.duration * 1000 || 10000);
+        }
+
+        // Mostrar arte no preview
+        function showPreviewArt() {
+            if (playlistItems.length === 0) return;
+
+            const currentItem = playlistItems[currentPreviewIndex];
+            const previewScreen = document.querySelector('.preview-screen');
+            
+            // Simular exibição da arte
+            previewScreen.innerHTML = `
+                <div style="text-align: center; color: white;">
+                    <i class="fas fa-image" style="font-size: 64px; margin-bottom: 16px;"></i>
+                    <h3>${currentItem.name}</h3>
+                    <p>${currentItem.campaign}</p>
+                </div>
+            `;
+
+            // Atualizar informações
+            document.getElementById('currentArtName').textContent = currentItem.name;
+            document.getElementById('currentPosition').textContent = `${currentPreviewIndex + 1} / ${playlistItems.length}`;
+            
+            // Simular progresso
+            let timeLeft = currentItem.duration;
+            const progressFill = document.getElementById('progressFill');
+            
+            const progressInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timeRemaining').textContent = `${timeLeft}s`;
+                
+                const progress = ((currentItem.duration - timeLeft) / currentItem.duration) * 100;
+                progressFill.style.width = `${progress}%`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(progressInterval);
+                    progressFill.style.width = '0%';
+                }
+            }, 1000);
+        }
+
+        // Parar preview
+        function stopPreview() {
+            if (previewInterval) {
+                clearInterval(previewInterval);
+                previewInterval = null;
+            }
+            
+            document.querySelector('.preview-screen').innerHTML = `
+                <div class="preview-placeholder">
+                    <i class="fas fa-tv" style="font-size: 64px; color: var(--text-light);"></i>
+                    <p class="text-muted mt-3">Preview da playlist aparecerá aqui</p>
+                </div>
+            `;
+            
+            document.getElementById('currentArtName').textContent = '-';
+            document.getElementById('currentPosition').textContent = '0 / 0';
+            document.getElementById('timeRemaining').textContent = '-';
+            document.getElementById('progressFill').style.width = '0%';
+        }
+
+        // Preview da playlist (modal)
+        function previewPlaylist() {
+            if (playlistItems.length === 0) {
+                alert('Adicione pelo menos uma arte à playlist para fazer o preview.');
+                return;
+            }
+            startPreview();
+        }
+
+        // Salvar playlist
+        function savePlaylist() {
+            const name = document.getElementById('playlistName').value.trim();
+            
+            if (!name) {
+                alert('Por favor, insira um nome para a playlist.');
+                return;
+            }
+            
+            if (playlistItems.length === 0) {
+                alert('Adicione pelo menos uma arte à playlist.');
+                return;
+            }
+
+            const playlistData = {
+                name: name,
+                category: document.getElementById('playlistCategory').value,
+                description: document.getElementById('playlistDescription').value,
+                items: playlistItems,
+                settings: {
+                    defaultDuration: document.getElementById('defaultDuration').value,
+                    transitionEffect: document.getElementById('transitionEffect').value,
+                    transitionDuration: document.getElementById('transitionDuration').value,
+                    loopPlaylist: document.getElementById('loopPlaylist').checked,
+                    randomOrder: document.getElementById('randomOrder').checked
+                }
+            };
+
+            console.log('Salvando playlist:', playlistData);
+            alert('Playlist salva com sucesso!');
+            
+            // Redirecionar ou limpar formulário
+            // window.location.href = 'dashboard.html';
+        }
+    </script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+

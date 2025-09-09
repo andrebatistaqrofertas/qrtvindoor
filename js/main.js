@@ -137,3 +137,102 @@ window.QRTVIndoor = {
     toggleMobileMenu
 };
 
+
+
+// Funções de Gerenciamento de TV (para tvs.html e dashboard.html)
+function openTVModal(tvId = null) {
+    const modal = document.getElementById('tvModal');
+    if (!modal) return;
+
+    const modalTitle = document.getElementById('tvModalTitle');
+    const tvNameInput = document.getElementById('tvName');
+    const tvLocationInput = document.getElementById('tvLocation');
+    const tvResolutionInput = document.getElementById('tvResolution');
+    const tvDescriptionInput = document.getElementById('tvDescription');
+    const tvPlaylistSelect = document.getElementById('tvPlaylist');
+    const pairingCodeInput = document.getElementById('pairingCode');
+
+    if (tvId) {
+        modalTitle.textContent = 'Editar TV';
+        // Simular carregamento de dados da TV para edição
+        tvNameInput.value = `TV ${tvId}`;
+        tvLocationInput.value = `Localização ${tvId}`;
+        tvResolutionInput.value = '1920x1080';
+        tvDescriptionInput.value = `Descrição da TV ${tvId}`;
+        tvPlaylistSelect.value = 'playlist1'; // Exemplo
+        pairingCodeInput.value = 'QRT-2024-001'; // Exemplo
+    } else {
+        modalTitle.textContent = 'Nova TV';
+        tvNameInput.value = '';
+        tvLocationInput.value = '';
+        tvResolutionInput.value = '';
+        tvDescriptionInput.value = '';
+        tvPlaylistSelect.value = '';
+        pairingCodeInput.value = 'QRT-2024-001'; // Gerar novo código para nova TV
+    }
+
+    openModal('tvModal');
+}
+
+function saveTV() {
+    if (validateForm('tvForm')) {
+        showNotification('TV salva com sucesso!', 'success');
+        closeModal('tvModal');
+    } else {
+        showNotification('Por favor, preencha todos os campos obrigatórios.', 'danger');
+    }
+}
+
+function editTV(tvId) {
+    openTVModal(tvId);
+}
+
+function testConnection(tvId) {
+    showNotification(`Testando conexão da TV ${tvId}...`, 'info');
+    // Simular teste de conexão
+    setTimeout(() => {
+        showNotification(`Conexão da TV ${tvId} estabelecida!`, 'success');
+    }, 1500);
+}
+
+function restartTV(tvId) {
+    showNotification(`Reiniciando TV ${tvId}...`, 'info');
+    // Simular reinício
+    setTimeout(() => {
+        showNotification(`TV ${tvId} reiniciada com sucesso!`, 'success');
+    }, 1500);
+}
+
+function deleteTV(tvId) {
+    if (confirm(`Tem certeza que deseja excluir a TV ${tvId}?`)) {
+        showNotification(`TV ${tvId} excluída.`, 'warning');
+        // Lógica para remover a linha da tabela/card
+    }
+}
+
+function generatePairingCode() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = 'QRT-';
+    for (let i = 0; i < 4; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    result += '-';
+    for (let i = 0; i < 3; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    document.getElementById('pairingCode').value = result;
+    showNotification('Novo código de pareamento gerado!', 'info');
+}
+
+// Exportar funções de TV para uso global
+window.QRTVIndoor = {
+    ...window.QRTVIndoor,
+    openTVModal,
+    saveTV,
+    editTV,
+    testConnection,
+    restartTV,
+    deleteTV,
+    generatePairingCode
+};
+

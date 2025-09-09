@@ -14,7 +14,9 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <img src="img/logo.png" alt="QR TV Indoor Logo" style="height: 30px;">
+                    <a href="dashboard.html">
+                        <a href="dashboard.html"><img src="img/logo.png" alt="QR TV Indoor Logo" style="height: 30px;"></a>
+                    </a>
                 </div>
             </div>
             <nav class="sidebar-nav">
@@ -201,13 +203,13 @@
                                 </td>
                                 <td class="text-muted">Há 2 minutos</td>
                                 <td>
-                                    <button class="btn btn-secondary btn-sm">
+                                    <button class="btn btn-secondary btn-sm" onclick="editTV('TV001')" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-primary btn-sm">
-                                        <i class="fas fa-play"></i>
+                                    <button class="btn btn-primary btn-sm" onclick="testConnection('TV001')" title="Testar Conexão">
+                                        <i class="fas fa-wifi"></i>
                                     </button>
-                                    <button class="btn btn-danger btn-sm">
+                                    <button class="btn btn-danger btn-sm" onclick="restartTV('TV001')" title="Reiniciar">
                                         <i class="fas fa-power-off"></i>
                                     </button>
                                 </td>
@@ -231,13 +233,13 @@
                                 </td>
                                 <td class="text-muted">Há 5 minutos</td>
                                 <td>
-                                    <button class="btn btn-secondary btn-sm">
+                                    <button class="btn btn-secondary btn-sm" onclick="editTV('TV002')" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-primary btn-sm">
-                                        <i class="fas fa-play"></i>
+                                    <button class="btn btn-primary btn-sm" onclick="testConnection('TV002')" title="Testar Conexão">
+                                        <i class="fas fa-wifi"></i>
                                     </button>
-                                    <button class="btn btn-danger btn-sm">
+                                    <button class="btn btn-danger btn-sm" onclick="restartTV('TV002')" title="Reiniciar">
                                         <i class="fas fa-power-off"></i>
                                     </button>
                                 </td>
@@ -261,13 +263,13 @@
                                 </td>
                                 <td class="text-muted">Há 2 horas</td>
                                 <td>
-                                    <button class="btn btn-secondary btn-sm">
+                                    <button class="btn btn-secondary btn-sm" onclick="editTV('TV003')" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-warning btn-sm">
-                                        <i class="fas fa-sync"></i>
+                                    <button class="btn btn-warning btn-sm" onclick="testConnection('TV003')" title="Reconectar">
+                                        <i class="fas fa-wifi"></i>
                                     </button>
-                                    <button class="btn btn-danger btn-sm">
+                                    <button class="btn btn-danger btn-sm" onclick="deleteTV('TV003')" title="Excluir">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
@@ -291,13 +293,13 @@
                                 </td>
                                 <td class="text-muted">Há 1 minuto</td>
                                 <td>
-                                    <button class="btn btn-secondary btn-sm">
+                                    <button class="btn btn-secondary btn-sm" onclick="editTV('TV004')" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-primary btn-sm">
-                                        <i class="fas fa-play"></i>
+                                    <button class="btn btn-primary btn-sm" onclick="testConnection('TV004')" title="Testar Conexão">
+                                        <i class="fas fa-wifi"></i>
                                     </button>
-                                    <button class="btn btn-danger btn-sm">
+                                    <button class="btn btn-danger btn-sm" onclick="restartTV('TV004')" title="Reiniciar">
                                         <i class="fas fa-power-off"></i>
                                     </button>
                                 </td>
@@ -321,13 +323,13 @@
                                 </td>
                                 <td class="text-muted">Há 3 minutos</td>
                                 <td>
-                                    <button class="btn btn-secondary btn-sm">
+                                    <button class="btn btn-secondary btn-sm" onclick="editTV('TV005')" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-primary btn-sm">
-                                        <i class="fas fa-play"></i>
+                                    <button class="btn btn-primary btn-sm" onclick="testConnection('TV005')" title="Testar Conexão">
+                                        <i class="fas fa-wifi"></i>
                                     </button>
-                                    <button class="btn btn-danger btn-sm">
+                                    <button class="btn btn-danger btn-sm" onclick="restartTV('TV005')" title="Reiniciar">
                                         <i class="fas fa-power-off"></i>
                                     </button>
                                 </td>
